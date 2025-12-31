@@ -25,8 +25,8 @@ export const items = [
     icon: Home,
   },
   {
-    title: "Test",
-    url: "/test",
+    title: "Projects",
+    url: "/projects",
     icon: StickyNote,
   },
 ]
