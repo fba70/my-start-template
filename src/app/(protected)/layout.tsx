@@ -22,7 +22,7 @@ export default async function DashboardLayout({
           <SidebarTrigger />
         </div>
 
-        <div className="absolute top-2 left-4 text-4xl font-bold bg-linear-to-r from-blue-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-12">
+        <div className="absolute top-2 left-16 text-4xl font-bold bg-linear-to-r from-blue-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-12">
           IN4COM
         </div>
 

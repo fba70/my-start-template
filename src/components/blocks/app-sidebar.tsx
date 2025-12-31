@@ -11,10 +11,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { Logout } from "./logout"
 import { ModeSwitcher } from "./mode-switcher"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 export const items = [
   {
@@ -31,14 +33,19 @@ export const items = [
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const { open } = useSidebar()
 
   return (
-    <Sidebar className="flex flex-col h-screen">
+    <Sidebar className="flex flex-col h-screen" collapsible="icon">
       <SidebarContent className="flex-1">
         <SidebarHeader className="flex flex-col items-center justify-center gap-2">
-          <h1 className="text-5xl font-bold bg-linear-to-r from-blue-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-2">
-            IN4COM
-          </h1>
+          {open ? (
+            <h1 className="text-5xl font-bold bg-linear-to-r from-blue-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-2">
+              IN4COM
+            </h1>
+          ) : (
+            <Image src="/Logo.jpg" alt="Logo" width={40} height={40} />
+          )}
         </SidebarHeader>
         <SidebarGroup>
           <SidebarGroupContent>
