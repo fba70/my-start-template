@@ -51,7 +51,7 @@ export function AppSidebar() {
                       className={`flex items-center p-2 rounded-md ${
                         pathname === item.url
                           ? "bg-gray-200 dark:bg-gray-600 text-orange-400"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-800 text-white"
+                          : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
                       }`}
                     >
                       <item.icon size={24} className="mr-2" />
