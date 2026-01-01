@@ -13,9 +13,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Logout } from "./logout"
 import { ModeSwitcher } from "./mode-switcher"
 import { usePathname } from "next/navigation"
+import { authClient } from "@/lib/auth-client"
+import Loading from "@/app/loading"
+import UnauthorizedPage from "@/app/unauthorized"
 import Image from "next/image"
 
 export const items = [
@@ -34,6 +38,18 @@ export const items = [
 export function AppSidebar() {
   const pathname = usePathname()
   const { open } = useSidebar()
+
+  const { data: session, isPending, error } = authClient.useSession()
+
+  if (isPending) {
+    return <Loading />
+  }
+
+  if (error || !session) {
+    return <UnauthorizedPage />
+  }
+
+  // console.log("User session in sidebar:", session)
 
   return (
     <Sidebar className="flex flex-col h-screen" collapsible="icon">
@@ -75,16 +91,38 @@ export function AppSidebar() {
       <SidebarFooter className="mt-auto mb-2">
         <SidebarMenu>
           <SidebarMenuItem>
+            <div className="flex items-center gap-3 p-1 rounded-md bg-gray-100 dark:bg-gray-600">
+              <Avatar>
+                <AvatarImage
+                  src={session.user.image ?? undefined}
+                  alt={session.user.name ?? "User"}
+                />
+                <AvatarFallback>
+                  {session.user.name
+                    ? session.user.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                    : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <span className="font-medium text-gray-800 dark:text-gray-100 truncate">
+                {session.user.name}
+              </span>
+            </div>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <a
                 href={"/settings"}
                 className={`flex items-center p-2 rounded-md ${
                   pathname === "/settings"
-                    ? "bg-gray-200 dark:bg-gray-700 text-blue-600"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                    ? "bg-gray-200 dark:bg-gray-600 text-orange-400"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
                 }`}
               >
-                <Settings size={24} className="mr-2" />
+                <Settings size={24} className="mr-4" />
                 <span className="text-lg">Settings</span>
               </a>
             </SidebarMenuButton>

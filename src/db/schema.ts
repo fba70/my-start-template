@@ -92,6 +92,8 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }))
 
+export type User = typeof user.$inferSelect
+
 export const schema = {
   user,
   session,

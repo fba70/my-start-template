@@ -1,7 +1,7 @@
 "use client"
 
-import { LoadingButton } from "@/components/loading-button"
-import { PasswordInput } from "@/components/password-input"
+import { LoadingButton } from "@/components/blocks/loading-button"
+import { PasswordInput } from "@/components/blocks/password-input"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Form,
@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { resetPassword } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client"
 
 const resetPasswordSchema = z.object({
   newPassword: passwordSchema,
@@ -44,7 +44,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     setSuccess(null)
     setError(null)
 
-    const { error } = await resetPassword({ token, newPassword })
+    const { error } = await authClient.resetPassword({ token, newPassword })
 
     if (error) {
       setError(error.message || "Something went wrong")

@@ -1,6 +1,6 @@
 "use client"
 
-import { LoadingButton } from "@/components/loading-button"
+import { LoadingButton } from "@/components/blocks/loading-button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Form,
@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { requestPasswordReset } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client"
 
 const forgotPasswordSchema = z.object({
   email: z.email({ message: "Please enter a valid email" }),
@@ -37,7 +37,7 @@ export function ForgotPasswordForm() {
     setError(null)
 
     // Call the API to send the reset password email
-    const { error } = await requestPasswordReset({
+    const { error } = await authClient.requestPasswordReset({
       email,
       redirectTo: "/reset-password",
     })

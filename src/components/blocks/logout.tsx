@@ -22,7 +22,7 @@ export function Logout() {
 
   return (
     <Button variant="ghost" onClick={handleLogout}>
-      <LogOut size={24} className="mr-2" />{" "}
+      <LogOut size={24} className="mr-4 ml-0" />{" "}
       {open && <span className="text-lg">Log Out</span>}
     </Button>
   )

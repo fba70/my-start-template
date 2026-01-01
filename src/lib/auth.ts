@@ -11,6 +11,11 @@ export const auth = betterAuth({
     provider: "pg",
     schema,
   }),
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // 1 day (every 1 day the session expiration is updated)
+    freshAge: 0, // 5 minutes, 0 to disable freshness checks
+  },
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,

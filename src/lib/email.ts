@@ -10,7 +10,7 @@ interface SendEmailValues {
 
 export async function sendEmails({ to, subject, body }: SendEmailValues) {
   await resend.emails.send({
-    from: "noreply@example.com",
+    from: "onboarding@resend.dev",
     to,
     subject,
     html: body,
