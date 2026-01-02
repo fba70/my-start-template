@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -20,11 +21,50 @@ type User = {
   image?: string | null | undefined
 }
 
-export default function DashboardPage() {
+export default function AccountPage() {
   const { data: session, refetch } = authClient.useSession()
   const user = session?.user as User | undefined
 
+  const [userState, setUserState] = useState<any>(null)
+  const [userOrders, setUserOrders] = useState<any[]>([])
+
   // console.log("User session in settings page:", user)
+
+  useEffect(() => {
+    async function fetchUserState() {
+      if (!user?.id) return
+      try {
+        const res = await fetch(
+          `/api/auth/polar/state?id=${encodeURIComponent(user.id)}`
+        )
+        const userState = await res.json()
+        setUserState(userState)
+        console.log("Polar user state:", userState)
+      } catch (e) {
+        console.error("Failed to fetch Polar user state:", e)
+      }
+    }
+
+    fetchUserState()
+  }, [user?.id])
+
+  useEffect(() => {
+    async function fetchUserOrders() {
+      if (!userState?.id) return
+      try {
+        const res = await fetch(
+          `/api/auth/polar/orders?id=${encodeURIComponent(userState?.id)}`
+        )
+        const userOrders = await res.json()
+        setUserOrders(userOrders.result.items)
+        console.log("Polar user orders:", userOrders.result.items)
+      } catch (e) {
+        console.error("Failed to fetch Polar user orders:", e)
+      }
+    }
+
+    fetchUserOrders()
+  }, [user?.id, userState?.id])
 
   return (
     <div className="flex flex-col gap-4 items-center justify-start h-screen">
@@ -114,7 +154,7 @@ export default function DashboardPage() {
 
           <div className="flex flex-row gap-4 items-center justify-center">
             <Link
-              href="https://buy.polar.sh/polar_cl_FiMDiynGGn97dqMLS9RkYqMQz4ql76NVeiutB0ij768"
+              href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
               target="_blank"
               rel="noopener noreferrer"
             >
