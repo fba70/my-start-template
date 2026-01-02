@@ -70,8 +70,8 @@ export const auth = betterAuth({
         checkout({
           products: [
             {
-              productId: "e1537822-acda-4f80-b06d-13e4590255cc",
-              slug: "Test-Product-001",
+              productId: "4411934b-5c8e-482d-b9fc-dd88c5ab625f",
+              slug: "Test-credit",
             },
           ],
           successUrl: process.env.POLAR_SUCCESS_URL,

@@ -67,7 +67,7 @@ export function SignUpForm() {
       email: email,
       password: password,
       name: name,
-      callbackURL: "/settings",
+      callbackURL: "/account",
     })
 
     if (error) {
