@@ -14,9 +14,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
 import { Logout } from "./logout"
 import { ModeSwitcher } from "./mode-switcher"
 import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
 import Loading from "@/app/loading"
 import UnauthorizedPage from "@/app/unauthorized"
@@ -54,15 +56,19 @@ export function AppSidebar() {
   return (
     <Sidebar className="flex flex-col h-screen" collapsible="icon">
       <SidebarContent className="flex-1">
-        <SidebarHeader className="flex flex-col items-center justify-center gap-2">
+        <SidebarHeader>
           {open ? (
-            <h1 className="text-5xl font-bold bg-linear-to-r from-blue-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-2">
-              IN4COM
-            </h1>
+            <div className="flex flex-row gap-4 items-center justify-center">
+              <Image src="/Logo.jpg" alt="Logo" width={36} height={36} />
+              <h1 className="text-4xl font-bold bg-linear-to-r from-blue-400 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+                PROJECT
+              </h1>
+            </div>
           ) : (
             <Image src="/Logo.jpg" alt="Logo" width={40} height={40} />
           )}
         </SidebarHeader>
+
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -88,11 +94,42 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="mt-auto mb-2">
+      <SidebarFooter className="mt-auto mb-1">
         <SidebarMenu>
           <SidebarMenuItem>
-            <div className="flex items-center gap-3 p-1 rounded-md bg-gray-100 dark:bg-gray-600">
-              <Avatar>
+            <SidebarMenuButton asChild>
+              <a
+                href={"/account"}
+                className={`flex items-center p-2 rounded-md ${
+                  pathname === "/account"
+                    ? "bg-gray-200 dark:bg-gray-600 text-orange-400"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
+                }`}
+              >
+                <Settings size={24} className="mr-4" />
+                <span className="text-lg">Account</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <ModeSwitcher className="flex items-center justify-start" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Logout />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <Separator className="my-1" />
+          <SidebarMenuItem className="p-1">
+            <div
+              className={cn(
+                "flex items-center gap-3 pl-1",
+                !open && "justify-center rounded-full"
+              )}
+            >
+              <Avatar className={cn("h-8 w-8", !open && "h-6 w-6")}>
                 <AvatarImage
                   src={session.user.image ?? undefined}
                   alt={session.user.name ?? "User"}
@@ -107,35 +144,12 @@ export function AppSidebar() {
                     : "U"}
                 </AvatarFallback>
               </Avatar>
-              <span className="font-medium text-gray-800 dark:text-gray-100 truncate">
-                {session.user.name}
-              </span>
+              {open && (
+                <span className="text-lg font-medium text-gray-800 dark:text-gray-100 truncate">
+                  {session.user.name}
+                </span>
+              )}
             </div>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a
-                href={"/settings"}
-                className={`flex items-center p-2 rounded-md ${
-                  pathname === "/settings"
-                    ? "bg-gray-200 dark:bg-gray-600 text-orange-400"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
-                }`}
-              >
-                <Settings size={24} className="mr-4" />
-                <span className="text-lg">Settings</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <ModeSwitcher className="flex items-center justify-start" />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Logout />
-            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

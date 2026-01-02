@@ -109,7 +109,7 @@ export default function UpdateUserDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="mt-4">
+        <Button variant="default" className="mt-4">
           Edit User Profile
         </Button>
       </DialogTrigger>
