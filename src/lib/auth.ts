@@ -71,7 +71,7 @@ export const auth = betterAuth({
           products: [
             {
               productId: "e1537822-acda-4f80-b06d-13e4590255cc",
-              slug: "Test-Product-(One-Off)",
+              slug: "Test-Product-001",
             },
           ],
           successUrl: process.env.POLAR_SUCCESS_URL,
