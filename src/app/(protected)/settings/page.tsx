@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { BadgeCheck, BadgeAlert } from "lucide-react"
 import UpdateUserDialog from "@/components/forms/form-edit-user"
+import ResetPasswordForm from "@/components/forms/form-reset-password"
 
 type User = {
   id: string
@@ -44,13 +45,13 @@ export default function DashboardPage() {
                   : "U"}
               </AvatarFallback>
             </Avatar>
-            <CardTitle>{user.name}</CardTitle>
+            <CardTitle className="text-xl font-medium">{user.name}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="grid grid-cols-2 grid-rows-3 gap-2">
-              <span className="font-medium text-gray-400">User Email:</span>
+              <span className="font-medium text-gray-500">User Email:</span>
               <span>{user.email}</span>
-              <span className="font-medium text-gray-400">Email Verified:</span>
+              <span className="font-medium text-gray-500">Email Verified:</span>
               <span>
                 {user.emailVerified ? (
                   <BadgeCheck className="inline-block text-green-500" />
@@ -58,7 +59,7 @@ export default function DashboardPage() {
                   <BadgeAlert className="inline-block text-red-500" />
                 )}
               </span>
-              <span className="font-medium text-gray-400">
+              <span className="font-medium text-gray-500">
                 User Created At:
               </span>
               <span>
@@ -68,7 +69,10 @@ export default function DashboardPage() {
               </span>
             </div>
 
-            <UpdateUserDialog user={user} onSuccess={refetch} />
+            <div className="flex felx-row gap-4 items-center justyfy-center">
+              <UpdateUserDialog user={user} onSuccess={refetch} />
+              <ResetPasswordForm />
+            </div>
           </CardContent>
         </Card>
       )}

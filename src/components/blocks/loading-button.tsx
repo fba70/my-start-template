@@ -1,10 +1,10 @@
-import * as React from "react";
+import * as React from "react"
 
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
 
 interface LoadingButtonProps extends React.ComponentProps<typeof Button> {
-  loading: boolean;
+  loading: boolean
 }
 
 export function LoadingButton({
@@ -14,8 +14,8 @@ export function LoadingButton({
   ...props
 }: LoadingButtonProps) {
   return (
-    <Button disabled={loading || disabled} {...props}>
+    <Button variant="default" disabled={loading || disabled} {...props}>
       {loading ? <Loader2 className="animate-spin" /> : children}
     </Button>
-  );
+  )
 }

@@ -11,6 +11,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { LoadingButton } from "@/components/blocks/loading-button"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 import {
@@ -45,28 +46,43 @@ export default function UpdateUserDialog({
   onSuccess?: () => void
 }) {
   const [open, setOpen] = useState(false)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+
+  const [imagePreview, setImagePreview] = useState(user.image || "")
+
   const form = useForm<UpdateUserFormData>({
     defaultValues: {
       name: user.name || "",
       image: user.image || "",
     },
   })
+
   const {
     setValue,
     formState: { errors },
   } = form
-  const [imagePreview, setImagePreview] = useState(user.image || "")
 
   const onSubmit = (data: UpdateUserFormData) => {
+    setSuccess(null)
+    setError(null)
+
     startTransition(async () => {
       await authClient.updateUser({
         name: data.name,
         image: data.image,
       })
+
+      if (error) {
+        setError(error || "Something went wrong")
+      } else {
+        if (onSuccess) onSuccess()
+        setSuccess("User data has been updated successfully!")
+      }
+
+      form.reset()
       setOpen(false)
-      if (onSuccess) onSuccess()
-      // Optionally refresh page or session here
     })
   }
 
@@ -97,7 +113,7 @@ export default function UpdateUserDialog({
           Edit User Profile
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="dark:bg-gray-800">
         <DialogHeader className="mb-2">
           <DialogTitle>Edit User Profile</DialogTitle>
         </DialogHeader>
@@ -141,10 +157,26 @@ export default function UpdateUserDialog({
                 </FormItem>
               )}
             />
+
+            {success && (
+              <div role="status" className="text-sm text-green-600">
+                {success}
+              </div>
+            )}
+            {error && (
+              <div role="alert" className="text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
             <DialogFooter>
-              <Button type="submit" disabled={isPending}>
-                {isPending ? "Saving..." : "Save"}
-              </Button>
+              <LoadingButton
+                type="submit"
+                className="w-full"
+                loading={isPending}
+              >
+                Save
+              </LoadingButton>
             </DialogFooter>
           </form>
         </Form>
