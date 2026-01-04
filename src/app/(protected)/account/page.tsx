@@ -10,6 +10,8 @@ import ResetPasswordForm from "@/components/forms/form-reset-password"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
+import { PolarCustomerState, PolarOrder } from "@/types/polar"
+import { TableUserOrders } from "@/components/tables/table-user-orders"
 
 type User = {
   id: string
@@ -21,12 +23,24 @@ type User = {
   image?: string | null | undefined
 }
 
+type SimplifiedOrders = {
+  id: string
+  createdAt: string
+  paid: boolean
+  netAmount: number
+  taxAmount: number
+  totalAmount: number
+  currency: string
+  invoiceNumber: string
+  productName: string
+}
+
 export default function AccountPage() {
   const { data: session, refetch } = authClient.useSession()
   const user = session?.user as User | undefined
 
-  const [userState, setUserState] = useState<any>(null)
-  const [userOrders, setUserOrders] = useState<any[]>([])
+  const [userState, setUserState] = useState<PolarCustomerState>()
+  const [userOrders, setUserOrders] = useState<SimplifiedOrders[]>([])
 
   // console.log("User session in settings page:", user)
 
@@ -39,7 +53,7 @@ export default function AccountPage() {
         )
         const userState = await res.json()
         setUserState(userState)
-        console.log("Polar user state:", userState)
+        // console.log("Polar user state:", userState)
       } catch (e) {
         console.error("Failed to fetch Polar user state:", e)
       }
@@ -55,9 +69,25 @@ export default function AccountPage() {
         const res = await fetch(
           `/api/auth/polar/orders?id=${encodeURIComponent(userState?.id)}`
         )
-        const userOrders = await res.json()
-        setUserOrders(userOrders.result.items)
-        console.log("Polar user orders:", userOrders.result.items)
+        const userOrdersAllData = await res.json()
+        // console.log("Polar user ALL orders:", userOrdersAllData.result.items)
+
+        // Transform to only include the required fields
+        const simplifiedOrders = (
+          userOrdersAllData.result.items as PolarOrder[]
+        ).map((order) => ({
+          id: order.id,
+          createdAt: order.createdAt,
+          paid: order.paid,
+          netAmount: order.netAmount,
+          taxAmount: order.taxAmount,
+          totalAmount: order.totalAmount,
+          currency: order.currency,
+          invoiceNumber: order.invoiceNumber,
+          productName: order.product?.name ?? "",
+        }))
+        setUserOrders(simplifiedOrders)
+        //console.log("Polar user orders:", simplifiedOrders)
       } catch (e) {
         console.error("Failed to fetch Polar user orders:", e)
       }
@@ -68,7 +98,7 @@ export default function AccountPage() {
 
   return (
     <div className="flex flex-col gap-4 items-center justify-start h-screen">
-      <h1 className="text-2xl font-medium mt-1">ACCOUNT</h1>
+      <h1 className="text-2xl font-medium mt-2">ACCOUNT</h1>
 
       {user && (
         <Card className="w-full max-w-md mt-6">
@@ -161,6 +191,15 @@ export default function AccountPage() {
               <Button>Purchase</Button>
             </Link>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full max-w-5xl mt-6">
+        <CardHeader className="flex flex-row items-center gap-6 justify-start">
+          <CardTitle className="text-xl font-medium">Account orders</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          {userOrders.length > 0 && <TableUserOrders orders={userOrders} />}
         </CardContent>
       </Card>
     </div>
