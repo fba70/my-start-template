@@ -73,8 +73,10 @@ export function SignUpForm() {
     if (error) {
       if (error.status === 422) {
         setError("Email address is already used, please select another one")
+        toast.error("Email address is already used, please select another one")
       } else {
         setError(error.message || "Unknown authorization error")
+        toast.error(error.message || "Unknown authorization error")
       }
     } else {
       toast.success("Sign-Up is successful!")

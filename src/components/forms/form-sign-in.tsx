@@ -71,6 +71,7 @@ export function SignInForm() {
 
     if (error) {
       setError(error.message || "Unknown authorization error")
+      toast.error(error.message || "Unknown authorization error")
     } else {
       toast.success("Sign-In is successful!")
       router.push(redirect)
@@ -87,9 +88,11 @@ export function SignInForm() {
     })
 
     setLoading(false)
+    toast.success("Redirecting to social provider for authentication...")
 
     if (error) {
       setError(error.message || "Unknown authorization error")
+      toast.error(error.message || "Unknown authorization error")
     }
   }
 

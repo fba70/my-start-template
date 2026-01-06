@@ -22,6 +22,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form"
+import { toast } from "sonner"
 
 type User = {
   id: string
@@ -76,9 +77,11 @@ export default function UpdateUserDialog({
 
       if (error) {
         setError(error || "Something went wrong")
+        toast.error(error || "Something went wrong")
       } else {
         if (onSuccess) onSuccess()
         setSuccess("User data has been updated successfully!")
+        toast.success("User data has been updated successfully!")
       }
 
       form.reset()

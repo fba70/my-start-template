@@ -26,6 +26,7 @@ import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { authClient } from "@/lib/auth-client"
+import { toast } from "sonner"
 
 const resetPasswordSchema = z.object({
   newPassword: passwordSchema,
@@ -60,8 +61,10 @@ export default function ResetPasswordForm() {
 
       if (error) {
         setError(error.message || "Something went wrong")
+        toast.error(error.message || "Something went wrong")
       } else {
         setSuccess("Password has been reset successfully!")
+        toast.success("Password has been reset successfully!")
         setTimeout(() => {
           router.push("/sign-in")
         }, 2000)

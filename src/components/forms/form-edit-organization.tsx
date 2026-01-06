@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form"
 import { InferSelectModel } from "drizzle-orm"
 import { schema } from "@/db/schema"
+import { toast } from "sonner"
 
 type Organization = InferSelectModel<typeof schema.organization>
 
@@ -85,6 +86,7 @@ export default function UpdateOrganizationDialog({
 
       if (slugError) {
         setError(slugError.message || "Error checking slug availability")
+        toast.error(slugError.message || "Error checking slug availability")
         return
       }
 
@@ -109,6 +111,7 @@ export default function UpdateOrganizationDialog({
       } else {
         if (onSuccess) onSuccess()
         setSuccess("Organization data has been updated successfully!")
+        toast.success("Organization data has been updated successfully!")
       }
 
       form.reset()
