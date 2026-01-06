@@ -23,6 +23,7 @@ import { authClient } from "@/lib/auth-client"
 import Loading from "@/app/loading"
 import UnauthorizedPage from "@/app/unauthorized"
 import Image from "next/image"
+import Link from "next/link"
 
 export const items = [
   {
@@ -98,7 +99,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a
+              <Link
                 href={"/account"}
                 className={`flex items-center p-2 rounded-md ${
                   pathname === "/account"
@@ -106,9 +107,9 @@ export function AppSidebar() {
                     : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
                 }`}
               >
-                <Settings size={24} className="mr-4" />
+                <Settings size={24} className="mr-3 ml-1" />
                 <span className="text-lg">Account</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
