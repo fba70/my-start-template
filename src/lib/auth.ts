@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { db } from "@/db/drizzle"
 import { schema } from "@/db/schema"
 import { sendEmails } from "@/lib/email"
-import { lastLoginMethod } from "better-auth/plugins"
+import { lastLoginMethod, organization } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js"
 import { polar, checkout, portal, usage } from "@polar-sh/better-auth" // webhooks
 import { Polar } from "@polar-sh/sdk"
@@ -63,6 +63,7 @@ export const auth = betterAuth({
   plugins: [
     lastLoginMethod(),
     nextCookies(),
+    organization(),
     polar({
       client: polarClient,
       createCustomerOnSignUp: true,
