@@ -71,6 +71,8 @@ export function SignUpForm() {
     })
 
     if (error) {
+      // TODO - Polar error validation for the sign-up process when email is already used
+
       setError(error.message || "Unknown authorization error")
     } else {
       toast.success("Sign-Up is successful!")

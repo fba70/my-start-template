@@ -12,6 +12,10 @@ import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
 import { PolarCustomerState, PolarOrder } from "@/types/polar"
 import { TableUserOrders } from "@/components/tables/table-user-orders"
+import UpdateOrganizationDialog from "@/components/forms/form-edit-organization"
+import Loading from "@/app/loading"
+import { InferSelectModel } from "drizzle-orm"
+import { schema } from "@/db/schema"
 
 type User = {
   id: string
@@ -35,14 +39,19 @@ type SimplifiedOrders = {
   productName: string
 }
 
+type Organization = InferSelectModel<typeof schema.organization>
+
 export default function AccountPage() {
   const { data: session, refetch } = authClient.useSession()
   const user = session?.user as User | undefined
 
   const [userState, setUserState] = useState<PolarCustomerState>()
   const [userOrders, setUserOrders] = useState<SimplifiedOrders[]>([])
+  const [ordersLoading, setOrdersLoading] = useState<boolean>(false)
+  const [organization, setOrganization] = useState<Organization | null>(null)
+  const [orgKey, setOrgKey] = useState(0)
 
-  // console.log("User session in settings page:", user)
+  // console.log("User session in settings page:", session)
 
   useEffect(() => {
     async function fetchUserState() {
@@ -63,8 +72,29 @@ export default function AccountPage() {
   }, [user?.id])
 
   useEffect(() => {
+    async function fetchOrganization() {
+      if (!user?.id) return
+      try {
+        const res = await fetch(
+          `/api/organization?userId=${encodeURIComponent(user.id)}`
+        )
+        const data = await res.json()
+        setOrganization(data.organization)
+        //console.log("User organization:", data.organization)
+      } catch (e) {
+        console.error("Failed to fetch organization:", e)
+      }
+    }
+
+    fetchOrganization()
+  }, [user?.id, orgKey])
+
+  useEffect(() => {
     async function fetchUserOrders() {
       if (!userState?.id) return
+
+      setOrdersLoading(true)
+
       try {
         const res = await fetch(
           `/api/auth/polar/orders?id=${encodeURIComponent(userState?.id)}`
@@ -91,6 +121,7 @@ export default function AccountPage() {
       } catch (e) {
         console.error("Failed to fetch Polar user orders:", e)
       }
+      setOrdersLoading(false)
     }
 
     fetchUserOrders()
@@ -100,59 +131,121 @@ export default function AccountPage() {
     <div className="flex flex-col gap-4 items-center justify-start h-screen">
       <h1 className="text-2xl font-medium mt-2">ACCOUNT</h1>
 
-      {user && (
-        <Card className="w-full max-w-md mt-6">
-          <CardHeader className="flex flex-row items-center gap-6 justify-start">
-            <Avatar>
-              <AvatarImage
-                src={user.image ?? undefined}
-                alt={user.name ?? "User"}
-              />
-              <AvatarFallback>
-                {user.name
-                  ? user.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()
-                  : "U"}
-              </AvatarFallback>
-            </Avatar>
-            <CardTitle className="text-xl font-medium">{user.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="grid grid-cols-2 grid-rows-3 gap-2">
-              <span className="font-medium dark:text-gray-400 text-gray-500">
-                User Email:
-              </span>
-              <span>{user.email}</span>
-              <span className="font-medium dark:text-gray-400 text-gray-500">
-                Email Verified:
-              </span>
-              <span>
-                {user.emailVerified ? (
-                  <BadgeCheck className="inline-block text-green-500" />
-                ) : (
-                  <BadgeAlert className="inline-block text-red-500" />
-                )}
-              </span>
-              <span className="font-medium dark:text-gray-400 text-gray-500">
-                User Created At:
-              </span>
-              <span>
-                {user.createdAt
-                  ? new Date(user.createdAt).toLocaleString()
-                  : "N/A"}
-              </span>
-            </div>
+      <div className="flex flex-row gap-12 items-center justify-center">
+        {user && (
+          <Card className="w-full max-w-xl mt-6">
+            <CardHeader className="flex flex-row items-center gap-6 justify-start">
+              <Avatar>
+                <AvatarImage
+                  src={user.image ?? undefined}
+                  alt={user.name ?? "User"}
+                />
+                <AvatarFallback>
+                  {user.name
+                    ? user.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                    : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <CardTitle className="text-xl font-medium">{user.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="grid grid-cols-2 grid-rows-3 gap-2">
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  User Email:
+                </span>
+                <span>{user.email}</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Email Verified:
+                </span>
+                <span>
+                  {user.emailVerified ? (
+                    <BadgeCheck className="inline-block text-green-500" />
+                  ) : (
+                    <BadgeAlert className="inline-block text-red-500" />
+                  )}
+                </span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  User Created At:
+                </span>
+                <span>
+                  {user.createdAt
+                    ? new Date(user.createdAt).toLocaleString()
+                    : "N/A"}
+                </span>
+              </div>
 
-            <div className="flex flex-row gap-4 items-center justify-center">
-              <UpdateUserDialog user={user} onSuccess={refetch} />
-              <ResetPasswordForm />
-            </div>
-          </CardContent>
-        </Card>
-      )}
+              <div className="flex flex-row gap-4 items-center justify-center">
+                <UpdateUserDialog user={user} onSuccess={refetch} />
+                <ResetPasswordForm />
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {organization && (
+          <Card className="w-full max-w-xl mt-6">
+            <CardHeader className="flex flex-row items-center gap-6 justify-start">
+              <Avatar>
+                <AvatarImage
+                  src={organization.logo ?? undefined}
+                  alt={organization.name ?? "Organization"}
+                />
+                <AvatarFallback>
+                  {organization.name
+                    ? organization.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                    : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <CardTitle className="text-xl font-medium">
+                {organization.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="grid grid-cols-2 grid-rows-3 gap-2">
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Organization name:
+                </span>
+                <span>{organization.name}</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Organization slug:
+                </span>
+                <span className="truncate">{organization.slug}</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Tax ID:
+                </span>
+                <span>
+                  {(() => {
+                    try {
+                      const parsed =
+                        typeof organization.metadata === "string"
+                          ? JSON.parse(organization.metadata)
+                          : organization.metadata
+                      return parsed?.taxId || "N/A"
+                    } catch {
+                      return "N/A"
+                    }
+                  })()}
+                </span>
+              </div>
+
+              <div className="flex flex-row gap-4 items-center justify-center">
+                <UpdateOrganizationDialog
+                  organization={organization}
+                  onSuccess={() => setOrgKey((prev) => prev + 1)}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <Card className="w-full max-w-5xl mt-6">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
@@ -252,7 +345,11 @@ export default function AccountPage() {
           <CardTitle className="text-xl font-medium">Account orders</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          {userOrders.length > 0 && <TableUserOrders orders={userOrders} />}
+          {ordersLoading ? (
+            <Loading />
+          ) : (
+            userOrders.length > 0 && <TableUserOrders orders={userOrders} />
+          )}
         </CardContent>
       </Card>
     </div>

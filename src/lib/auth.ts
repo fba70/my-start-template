@@ -7,6 +7,7 @@ import { lastLoginMethod, organization } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js"
 import { polar, checkout, portal, usage } from "@polar-sh/better-auth" // webhooks
 import { Polar } from "@polar-sh/sdk"
+import { getActiveOrganization } from "@/server/organizations"
 
 const polarClient = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
@@ -58,6 +59,37 @@ export const auth = betterAuth({
         subject: "Verify your email address",
         body: `Click this link to verify your email: ${url}`,
       })
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          const slug = `Org-${crypto.randomUUID()}`
+          await auth.api.createOrganization({
+            body: {
+              name: "My Organization",
+              slug: slug,
+              logo: "",
+              metadata: {},
+              userId: user.id,
+            },
+          })
+        },
+      },
+    },
+    session: {
+      create: {
+        before: async (session) => {
+          const organization = await getActiveOrganization(session.userId)
+          return {
+            data: {
+              ...session,
+              activeOrganizationId: organization?.id,
+            },
+          }
+        },
+      },
     },
   },
   plugins: [
