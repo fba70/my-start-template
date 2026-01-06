@@ -154,42 +154,95 @@ export default function AccountPage() {
         </Card>
       )}
 
-      <Card className="w-full max-w-md mt-6">
+      <Card className="w-full max-w-5xl mt-6">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
           <CardTitle className="text-xl font-medium">Account balance</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          <div className="grid grid-cols-2 grid-rows-1 gap-2">
+          <div className="flex flex-row gap-4 items-center justify-start">
             <span className="font-medium dark:text-gray-400 text-gray-500">
               Current balance (EUR):
             </span>
-            <span>12.30</span>
+            <span className="text-xl font-medium">12.30</span>
           </div>
           <Separator />
           <div>Purchase credits</div>
-          <div className="grid grid-cols-2 grid-rows-3 gap-2">
-            <span className="font-medium dark:text-gray-400 text-gray-500">
-              Purchase name:
-            </span>
-            <span>One-off credits purchase</span>
-            <span className="font-medium dark:text-gray-400 text-gray-500">
-              Product price (EUR):
-            </span>
-            <span>10.00</span>
-            <span className="font-medium dark:text-gray-400 text-gray-500">
-              Purchase type:
-            </span>
-            <span>One-off purchase</span>
-          </div>
-
-          <div className="flex flex-row gap-4 items-center justify-center">
-            <Link
-              href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button>Purchase</Button>
-            </Link>
+          <div className="flex flex-row gap-8 items-center justify-center">
+            <div className="border-2 border-gray-200 dark:border-gray-700 rounded-md p-4">
+              <div className="grid grid-cols-2 grid-rows-3 gap-x-6 gap-y-2">
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Product:
+                </span>
+                <span className="font-bold text-lime-600">STARTER</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Price (EUR):
+                </span>
+                <span>20.00</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Purchase type:
+                </span>
+                <span>One-off</span>
+              </div>
+              <div className="flex flex-row gap-4 items-center justify-center mt-4">
+                <Link
+                  href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button>Purchase</Button>
+                </Link>
+              </div>
+            </div>
+            <div className="border-2 border-gray-200 dark:border-gray-700 rounded-md p-4">
+              <div className="grid grid-cols-2 grid-rows-3 gap-x-6 gap-y-2">
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Product:
+                </span>
+                <span className="font-bold text-blue-500">PRO</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Price (EUR):
+                </span>
+                <span>100.00</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Purchase type:
+                </span>
+                <span>One-off</span>
+              </div>
+              <div className="flex flex-row gap-4 items-center justify-center mt-4">
+                <Link
+                  href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button>Purchase</Button>
+                </Link>
+              </div>
+            </div>
+            <div className="border-2 border-gray-200 dark:border-gray-700 rounded-md p-4">
+              <div className="grid grid-cols-2 grid-rows-3 gap-x-6 gap-y-2">
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Product:
+                </span>
+                <span className="font-bold text-orange-600">ULTIMATE</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Price (EUR):
+                </span>
+                <span>500.00</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Purchase type:
+                </span>
+                <span>One-off</span>
+              </div>
+              <div className="flex flex-row gap-4 items-center justify-center mt-4">
+                <Link
+                  href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button>Purchase</Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
