@@ -3,9 +3,9 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { db } from "@/db/drizzle"
 import { schema } from "@/db/schema"
 import { sendEmails } from "@/lib/email"
-import { lastLoginMethod, organization } from "better-auth/plugins"
+import { lastLoginMethod, organization, apiKey } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js"
-import { polar, checkout, portal, usage } from "@polar-sh/better-auth" // webhooks
+import { polar, checkout, portal, usage } from "@polar-sh/better-auth"
 import { Polar } from "@polar-sh/sdk"
 import { getActiveOrganization } from "@/server/organizations"
 
@@ -96,6 +96,7 @@ export const auth = betterAuth({
     lastLoginMethod(),
     nextCookies(),
     organization(),
+    apiKey(),
     polar({
       client: polarClient,
       createCustomerOnSignUp: true,

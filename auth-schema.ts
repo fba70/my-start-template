@@ -1,14 +1,13 @@
-import { relations } from "drizzle-orm"
+import { relations } from "drizzle-orm";
 import {
   pgTable,
   text,
   timestamp,
   boolean,
-  index,
   integer,
+  index,
   uniqueIndex,
-  pgEnum,
-} from "drizzle-orm/pg-core"
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -21,7 +20,7 @@ export const user = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-})
+});
 
 export const session = pgTable(
   "session",
@@ -40,8 +39,8 @@ export const session = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     activeOrganizationId: text("active_organization_id"),
   },
-  (table) => [index("session_userId_idx").on(table.userId)]
-)
+  (table) => [index("session_userId_idx").on(table.userId)],
+);
 
 export const account = pgTable(
   "account",
@@ -64,8 +63,8 @@ export const account = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("account_userId_idx").on(table.userId)]
-)
+  (table) => [index("account_userId_idx").on(table.userId)],
+);
 
 export const verification = pgTable(
   "verification",
@@ -80,8 +79,8 @@ export const verification = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("verification_identifier_idx").on(table.identifier)]
-)
+  (table) => [index("verification_identifier_idx").on(table.identifier)],
+);
 
 export const organization = pgTable(
   "organization",
@@ -93,12 +92,8 @@ export const organization = pgTable(
     createdAt: timestamp("created_at").notNull(),
     metadata: text("metadata"),
   },
-  (table) => [uniqueIndex("organization_slug_uidx").on(table.slug)]
-)
-
-export const role = pgEnum("role", ["member", "admin", "owner"])
-
-export type Role = (typeof role.enumValues)[number]
+  (table) => [uniqueIndex("organization_slug_uidx").on(table.slug)],
+);
 
 export const member = pgTable(
   "member",
@@ -116,8 +111,8 @@ export const member = pgTable(
   (table) => [
     index("member_organizationId_idx").on(table.organizationId),
     index("member_userId_idx").on(table.userId),
-  ]
-)
+  ],
+);
 
 export const invitation = pgTable(
   "invitation",
@@ -138,8 +133,8 @@ export const invitation = pgTable(
   (table) => [
     index("invitation_organizationId_idx").on(table.organizationId),
     index("invitation_email_idx").on(table.email),
-  ]
-)
+  ],
+);
 
 export const apikey = pgTable(
   "apikey",
@@ -171,8 +166,8 @@ export const apikey = pgTable(
   (table) => [
     index("apikey_key_idx").on(table.key),
     index("apikey_userId_idx").on(table.userId),
-  ]
-)
+  ],
+);
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
@@ -180,26 +175,26 @@ export const userRelations = relations(user, ({ many }) => ({
   members: many(member),
   invitations: many(invitation),
   apikeys: many(apikey),
-}))
+}));
 
 export const sessionRelations = relations(session, ({ one }) => ({
   user: one(user, {
     fields: [session.userId],
     references: [user.id],
   }),
-}))
+}));
 
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
     references: [user.id],
   }),
-}))
+}));
 
 export const organizationRelations = relations(organization, ({ many }) => ({
   members: many(member),
   invitations: many(invitation),
-}))
+}));
 
 export const memberRelations = relations(member, ({ one }) => ({
   organization: one(organization, {
@@ -210,7 +205,7 @@ export const memberRelations = relations(member, ({ one }) => ({
     fields: [member.userId],
     references: [user.id],
   }),
-}))
+}));
 
 export const invitationRelations = relations(invitation, ({ one }) => ({
   organization: one(organization, {
@@ -221,31 +216,11 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
     fields: [invitation.inviterId],
     references: [user.id],
   }),
-}))
+}));
 
 export const apikeyRelations = relations(apikey, ({ one }) => ({
   user: one(user, {
     fields: [apikey.userId],
     references: [user.id],
   }),
-}))
-
-export type User = typeof user.$inferSelect
-export type Session = typeof session.$inferSelect
-export type Account = typeof account.$inferSelect
-export type Verification = typeof verification.$inferSelect
-export type Organization = typeof organization.$inferSelect
-export type Member = typeof member.$inferSelect
-export type Invitation = typeof invitation.$inferSelect
-export type ApiKey = typeof apikey.$inferSelect
-
-export const schema = {
-  user,
-  session,
-  account,
-  verification,
-  organization,
-  member,
-  invitation,
-  apikey,
-}
+}));

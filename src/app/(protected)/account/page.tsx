@@ -12,6 +12,8 @@ import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
 import { PolarCustomerState, PolarOrder } from "@/types/polar"
 import { TableUserOrders } from "@/components/tables/table-user-orders"
+import { TableUserUsage } from "@/components/tables/table-user-usage"
+import { TableUserApiKeys } from "@/components/tables/table-user-api-keys"
 import UpdateOrganizationDialog from "@/components/forms/form-edit-organization"
 import Loading from "@/app/loading"
 import { InferSelectModel } from "drizzle-orm"
@@ -51,7 +53,7 @@ export default function AccountPage() {
   const [organization, setOrganization] = useState<Organization | null>(null)
   const [orgKey, setOrgKey] = useState(0)
 
-  // console.log("User session in settings page:", session)
+  //console.log("User session in settings page:", session)
 
   useEffect(() => {
     async function fetchUserState() {
@@ -249,7 +251,7 @@ export default function AccountPage() {
 
       <Card className="w-full max-w-5xl mt-6">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
-          <CardTitle className="text-xl font-medium">Account balance</CardTitle>
+          <CardTitle className="text-xl font-medium">Balance</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="flex flex-row gap-4 items-center justify-start">
@@ -257,6 +259,10 @@ export default function AccountPage() {
               Current balance (EUR):
             </span>
             <span className="text-xl font-medium">12.30</span>
+            <span className="font-medium dark:text-gray-400 text-gray-500 ml-8">
+              Current balance (Coins):
+            </span>
+            <span className="text-xl font-medium">1,560</span>
           </div>
           <Separator />
           <div>Purchase credits</div>
@@ -342,7 +348,7 @@ export default function AccountPage() {
 
       <Card className="w-full max-w-5xl mt-6">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
-          <CardTitle className="text-xl font-medium">Account orders</CardTitle>
+          <CardTitle className="text-xl font-medium">Orders</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           {ordersLoading ? (
@@ -350,6 +356,24 @@ export default function AccountPage() {
           ) : (
             userOrders.length > 0 && <TableUserOrders orders={userOrders} />
           )}
+        </CardContent>
+      </Card>
+
+      <Card className="w-full max-w-5xl mt-6">
+        <CardHeader className="flex flex-row items-center gap-6 justify-start">
+          <CardTitle className="text-xl font-medium">Usage</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <TableUserUsage />
+        </CardContent>
+      </Card>
+
+      <Card className="w-full max-w-5xl mt-6">
+        <CardHeader className="flex flex-row items-center gap-6 justify-start">
+          <CardTitle className="text-xl font-medium">API keys</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <TableUserApiKeys />
         </CardContent>
       </Card>
     </div>
