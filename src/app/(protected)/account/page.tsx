@@ -130,12 +130,12 @@ export default function AccountPage() {
   }, [user?.id, userState?.id])
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-start h-screen">
+    <div className="flex flex-col gap-6 items-center justify-start h-screen">
       <h1 className="text-2xl font-medium mt-2">ACCOUNT</h1>
 
       <div className="flex flex-row gap-12 items-center justify-center">
         {user && (
-          <Card className="w-full max-w-xl mt-6">
+          <Card className="w-full max-w-xl">
             <CardHeader className="flex flex-row items-center gap-6 justify-start">
               <Avatar>
                 <AvatarImage
@@ -189,7 +189,7 @@ export default function AccountPage() {
         )}
 
         {organization && (
-          <Card className="w-full max-w-xl mt-6">
+          <Card className="w-full max-w-xl">
             <CardHeader className="flex flex-row items-center gap-6 justify-start">
               <Avatar>
                 <AvatarImage
@@ -249,7 +249,7 @@ export default function AccountPage() {
         )}
       </div>
 
-      <Card className="w-full max-w-5xl mt-6">
+      <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
           <CardTitle className="text-xl font-medium">Balance</CardTitle>
         </CardHeader>
@@ -358,7 +358,7 @@ export default function AccountPage() {
         </CardContent>
       </Card>
 
-      <Card className="w-full max-w-5xl mt-6">
+      <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
           <CardTitle className="text-xl font-medium">Purchases</CardTitle>
         </CardHeader>
@@ -371,7 +371,7 @@ export default function AccountPage() {
         </CardContent>
       </Card>
 
-      <Card className="w-full max-w-5xl mt-6">
+      <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
           <CardTitle className="text-xl font-medium">Usage</CardTitle>
         </CardHeader>
@@ -380,7 +380,7 @@ export default function AccountPage() {
         </CardContent>
       </Card>
 
-      <Card className="w-full max-w-5xl mt-6">
+      <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
           <CardTitle className="text-xl font-medium">API keys</CardTitle>
         </CardHeader>

@@ -18,7 +18,7 @@ export default async function DashboardLayout({
       <AppSidebar />
 
       <div className="flex-1 flex flex-col">
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 right-3">
           <SidebarTrigger />
         </div>
 
