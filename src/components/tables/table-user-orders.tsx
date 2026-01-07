@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Download } from "lucide-react"
+import { toast } from "sonner"
 
 type SimplifiedOrder = {
   id: string
@@ -62,6 +64,25 @@ export function TableUserOrders({ orders }: TableUserOrdersProps) {
     page * ITEMS_PER_PAGE
   )
 
+  const handleDownload = async (invoiceId: string) => {
+    try {
+      const res = await fetch(`/api/auth/polar/invoices?id=${invoiceId}`)
+      if (!res.ok) {
+        throw new Error("Failed to fetch invoice")
+      }
+      const data = await res.json()
+      if (data.url) {
+        window.open(data.url, "_blank")
+        toast.success("Invoice opened in new tab")
+      } else {
+        toast.error("Invoice URL not available")
+      }
+    } catch (err) {
+      console.log("Error opening invoice:", err)
+      toast.error("Failed to open invoice")
+    }
+  }
+
   return (
     <>
       <div className="flex gap-2 mb-4">
@@ -99,7 +120,17 @@ export function TableUserOrders({ orders }: TableUserOrdersProps) {
         <TableBody>
           {paginatedOrders.map((order) => (
             <TableRow key={order.id}>
-              <TableCell>{order.invoiceNumber}</TableCell>
+              <TableCell>
+                <div className="flex flex-row gap-4 items-center justify-start">
+                  {order.invoiceNumber}
+                  <Button
+                    variant="outline"
+                    onClick={() => handleDownload(order.id)}
+                  >
+                    <Download size={16} />
+                  </Button>
+                </div>
+              </TableCell>
               <TableCell>
                 {new Date(order.createdAt).toLocaleString()}
               </TableCell>

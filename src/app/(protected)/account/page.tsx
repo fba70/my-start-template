@@ -262,13 +262,13 @@ export default function AccountPage() {
             <span className="font-medium dark:text-gray-400 text-gray-500 ml-8">
               Current balance (Coins):
             </span>
-            <span className="text-xl font-medium">1,560</span>
+            <span className="text-xl font-medium">1,230</span>
           </div>
           <Separator />
           <div>Purchase credits</div>
           <div className="flex flex-row gap-8 items-center justify-center">
             <div className="border-2 border-gray-200 dark:border-gray-700 rounded-md p-4">
-              <div className="grid grid-cols-2 grid-rows-3 gap-x-6 gap-y-2">
+              <div className="grid grid-cols-2 grid-rows-4 gap-x-6 gap-y-2">
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Product:
                 </span>
@@ -278,11 +278,15 @@ export default function AccountPage() {
                 </span>
                 <span>20.00</span>
                 <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Coins:
+                </span>
+                <span>2,000</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
                   Purchase type:
                 </span>
                 <span>One-off</span>
               </div>
-              <div className="flex flex-row gap-4 items-center justify-center mt-4">
+              <div className="flex flex-row gap-4 items-center justify-center mt-6">
                 <Link
                   href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
                   target="_blank"
@@ -293,7 +297,7 @@ export default function AccountPage() {
               </div>
             </div>
             <div className="border-2 border-gray-200 dark:border-gray-700 rounded-md p-4">
-              <div className="grid grid-cols-2 grid-rows-3 gap-x-6 gap-y-2">
+              <div className="grid grid-cols-2 grid-rows-4 gap-x-6 gap-y-2">
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Product:
                 </span>
@@ -303,11 +307,15 @@ export default function AccountPage() {
                 </span>
                 <span>100.00</span>
                 <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Coins:
+                </span>
+                <span>10,000</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
                   Purchase type:
                 </span>
                 <span>One-off</span>
               </div>
-              <div className="flex flex-row gap-4 items-center justify-center mt-4">
+              <div className="flex flex-row gap-4 items-center justify-center mt-6">
                 <Link
                   href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
                   target="_blank"
@@ -318,7 +326,7 @@ export default function AccountPage() {
               </div>
             </div>
             <div className="border-2 border-gray-200 dark:border-gray-700 rounded-md p-4">
-              <div className="grid grid-cols-2 grid-rows-3 gap-x-6 gap-y-2">
+              <div className="grid grid-cols-2 grid-rows-4 gap-x-6 gap-y-2">
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Product:
                 </span>
@@ -328,11 +336,15 @@ export default function AccountPage() {
                 </span>
                 <span>500.00</span>
                 <span className="font-medium dark:text-gray-400 text-gray-500">
+                  Coins:
+                </span>
+                <span>50,000</span>
+                <span className="font-medium dark:text-gray-400 text-gray-500">
                   Purchase type:
                 </span>
                 <span>One-off</span>
               </div>
-              <div className="flex flex-row gap-4 items-center justify-center mt-4">
+              <div className="flex flex-row gap-4 items-center justify-center mt-6">
                 <Link
                   href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_L6wreTRQmMcJQeLVILkTtzuDkb0DOe41PZffJ3jNxv8/redirect"
                   target="_blank"
@@ -348,7 +360,7 @@ export default function AccountPage() {
 
       <Card className="w-full max-w-5xl mt-6">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
-          <CardTitle className="text-xl font-medium">Orders</CardTitle>
+          <CardTitle className="text-xl font-medium">Purchases</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           {ordersLoading ? (
