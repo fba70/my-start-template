@@ -5,7 +5,9 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-2 items-center justify-start h-screen">
       <h1 className="text-2xl font-medium mt-2">DASHBOARD</h1>
 
-      <ElectricCard />
+      <div className="mt-12">
+        <ElectricCard />
+      </div>
     </div>
   )
 }

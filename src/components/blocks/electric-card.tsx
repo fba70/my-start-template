@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default function ElectricCard() {
   return (
-    <div className="relative flex flex-col items-center justify-center h-screen bg-transparent text-[oklch(0.985_0_0)] overflow-hidden">
+    <div className="relative bg-transparent text-[oklch(0.985_0_0)] overflow-hidden">
       <svg className="absolute">
         <defs>
           <filter
