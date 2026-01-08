@@ -8,6 +8,19 @@ import { nextCookies } from "better-auth/next-js"
 import { polar, checkout, portal, usage } from "@polar-sh/better-auth"
 import { Polar } from "@polar-sh/sdk"
 import { getActiveOrganization } from "@/server/organizations"
+import {
+  uniqueUsernameGenerator,
+  Config,
+  adjectives,
+  nouns,
+} from "unique-username-generator"
+
+const config: Config = {
+  dictionaries: [adjectives, nouns],
+  separator: "-",
+  length: 2,
+  style: "lowerCase",
+}
 
 const polarClient = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
@@ -65,7 +78,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          const slug = `Org-${crypto.randomUUID()}`
+          const slug = uniqueUsernameGenerator(config)
           await auth.api.createOrganization({
             body: {
               name: "My Organization",

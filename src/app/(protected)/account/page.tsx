@@ -136,6 +136,7 @@ export default function AccountPage() {
         {user && (
           <Card className="w-full max-w-xl">
             <CardHeader className="flex flex-row items-center gap-6 justify-start">
+              <CardTitle className="text-xl font-medium">User:</CardTitle>
               <Avatar>
                 <AvatarImage
                   src={user.image ?? undefined}
@@ -190,6 +191,9 @@ export default function AccountPage() {
         {organization && (
           <Card className="w-full max-w-xl">
             <CardHeader className="flex flex-row items-center gap-6 justify-start">
+              <CardTitle className="text-xl font-medium">
+                Organization:
+              </CardTitle>
               <Avatar>
                 <AvatarImage
                   src={organization.logo ?? undefined}
@@ -205,7 +209,7 @@ export default function AccountPage() {
                     : "U"}
                 </AvatarFallback>
               </Avatar>
-              <CardTitle className="text-xl font-medium">
+              <CardTitle className="text-xl font-medium truncate">
                 {organization.name}
               </CardTitle>
             </CardHeader>
@@ -359,7 +363,9 @@ export default function AccountPage() {
 
       <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
-          <CardTitle className="text-xl font-medium">Purchases</CardTitle>
+          <CardTitle className="text-xl font-medium">
+            Purchases history
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           {ordersLoading ? (
@@ -372,7 +378,7 @@ export default function AccountPage() {
 
       <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
-          <CardTitle className="text-xl font-medium">Usage</CardTitle>
+          <CardTitle className="text-xl font-medium">Usage history</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <TableUserUsage />
@@ -381,7 +387,9 @@ export default function AccountPage() {
 
       <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
-          <CardTitle className="text-xl font-medium">API keys</CardTitle>
+          <CardTitle className="text-xl font-medium">
+            API keys management
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <TableUserApiKeys />
