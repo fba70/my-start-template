@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { useEffect, useState } from "react"
 import {
   Table,
@@ -13,9 +12,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import type { ApiKey } from "@/db/schema"
-import Loading from "@/app/loading"
 import CreateApiKeyDialog from "@/components/forms/form-create-api-key"
 import { toast } from "sonner"
+import { Loader } from "lucide-react"
 
 const ITEMS_PER_PAGE = 5
 
@@ -99,12 +98,9 @@ export function TableUserApiKeys() {
         toast.error(errorData.error || "Failed to delete API key")
       }
     } catch (err) {
+      console.error("Network error:", err)
       toast.error("Network error")
     }
-  }
-
-  if (loading) {
-    return <Loading />
   }
 
   if (error) {
@@ -117,86 +113,92 @@ export function TableUserApiKeys() {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between gap-2 mb-4">
-        <div className="flex flex-row items-center justify-center gap-2">
-          <Input
-            placeholder="Search key name"
-            type="text"
-            value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
-            className="max-w-xs"
-          />
-          <Button variant="outline" onClick={() => setSortAsc(!sortAsc)}>
-            Sort by Date {sortAsc ? "↑" : "↓"}
-          </Button>
-        </div>
+      {loading ? (
+        <Loader className="animate-spin h-6 w-6 text-gray-900 dark:text-gray-100" />
+      ) : (
+        <>
+          <div className="flex flex-row items-center justify-between gap-2 mb-4">
+            <div className="flex flex-row items-center justify-center gap-2">
+              <Input
+                placeholder="Search key name"
+                type="text"
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                className="max-w-xs"
+              />
+              <Button variant="outline" onClick={() => setSortAsc(!sortAsc)}>
+                Sort by Date {sortAsc ? "↑" : "↓"}
+              </Button>
+            </div>
 
-        <CreateApiKeyDialog
-          onSuccess={() => setKeyChange((prev) => prev + 1)}
-        />
-      </div>
+            <CreateApiKeyDialog
+              onSuccess={() => setKeyChange((prev) => prev + 1)}
+            />
+          </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Key name</TableHead>
-            <TableHead>Created at</TableHead>
-            <TableHead>Expires at</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedKeys.map((key) => {
-            const status = getStatus(key.expiresAt)
-            return (
-              <TableRow key={key.id}>
-                <TableCell>{key.name}</TableCell>
-                <TableCell>
-                  {new Date(key.createdAt).toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  {key.expiresAt
-                    ? new Date(key.expiresAt).toLocaleString()
-                    : "Never"}
-                </TableCell>
-                <TableCell>
-                  <span className={status.color}>{status.text}</span>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outline"
-                    onClick={() => handleDelete(key.id)}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Key name</TableHead>
+                <TableHead>Created at</TableHead>
+                <TableHead>Expires at</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
-      <div className="flex items-center justify-end gap-4 mt-4">
-        <span className="text-sm text-gray-400">
-          page {page} of {totalPages}
-        </span>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            previous
-          </Button>
-          <Button
-            variant="outline"
-            disabled={page === totalPages || totalPages === 0}
-            onClick={() => setPage(page + 1)}
-          >
-            next
-          </Button>
-        </div>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {paginatedKeys.map((key) => {
+                const status = getStatus(key.expiresAt)
+                return (
+                  <TableRow key={key.id}>
+                    <TableCell>{key.name}</TableCell>
+                    <TableCell>
+                      {new Date(key.createdAt).toLocaleString()}
+                    </TableCell>
+                    <TableCell>
+                      {key.expiresAt
+                        ? new Date(key.expiresAt).toLocaleString()
+                        : "Never"}
+                    </TableCell>
+                    <TableCell>
+                      <span className={status.color}>{status.text}</span>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleDelete(key.id)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+          <div className="flex items-center justify-end gap-4 mt-4">
+            <span className="text-sm text-gray-400">
+              page {page} of {totalPages}
+            </span>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+              >
+                previous
+              </Button>
+              <Button
+                variant="outline"
+                disabled={page === totalPages || totalPages === 0}
+                onClick={() => setPage(page + 1)}
+              >
+                next
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

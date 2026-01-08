@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, Settings, StickyNote } from "lucide-react"
+import { Home, Settings, StickyNote, Loader } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -20,7 +20,6 @@ import { ModeSwitcher } from "./mode-switcher"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
-import Loading from "@/app/loading"
 import UnauthorizedPage from "@/app/unauthorized"
 import Image from "next/image"
 import Link from "next/link"
@@ -44,11 +43,7 @@ export function AppSidebar() {
 
   const { data: session, isPending, error } = authClient.useSession()
 
-  if (isPending) {
-    return <Loading />
-  }
-
-  if (error || !session) {
+  if (!isPending && (error || !session)) {
     return <UnauthorizedPage />
   }
 
@@ -124,33 +119,43 @@ export function AppSidebar() {
           </SidebarMenuItem>
           <Separator className="my-1" />
           <SidebarMenuItem className="p-1">
-            <div
-              className={cn(
-                "flex items-center gap-3 pl-1",
-                !open && "justify-center rounded-full"
-              )}
-            >
-              <Avatar className={cn("h-8 w-8", !open && "h-6 w-6")}>
-                <AvatarImage
-                  src={session.user.image ?? undefined}
-                  alt={session.user.name ?? "User"}
-                />
-                <AvatarFallback>
-                  {session.user.name
-                    ? session.user.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toUpperCase()
-                    : "U"}
-                </AvatarFallback>
-              </Avatar>
-              {open && (
-                <span className="text-lg font-medium text-gray-800 dark:text-gray-100 truncate">
-                  {session.user.name}
-                </span>
-              )}
-            </div>
+            {isPending ? (
+              <div className="flex items-center justify-center p-2">
+                <Loader className="animate-spin h-6 w-6 text-gray-900 dark:text-gray-100" />
+              </div>
+            ) : session ? (
+              <div
+                className={cn(
+                  "flex items-center gap-3 pl-1",
+                  !open && "justify-center rounded-full"
+                )}
+              >
+                <Avatar className={cn("h-8 w-8", !open && "h-6 w-6")}>
+                  <AvatarImage
+                    src={session.user.image ?? undefined}
+                    alt={session.user.name ?? "User"}
+                  />
+                  <AvatarFallback>
+                    {session.user.name
+                      ? session.user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()
+                      : "U"}
+                  </AvatarFallback>
+                </Avatar>
+                {open && (
+                  <span className="text-lg font-medium text-gray-800 dark:text-gray-100 truncate">
+                    {session.user.name}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center p-2">
+                <span className="text-sm text-gray-500">No session</span>
+              </div>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

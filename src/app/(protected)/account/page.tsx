@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { BadgeCheck, BadgeAlert } from "lucide-react"
+import { BadgeCheck, BadgeAlert, Loader } from "lucide-react"
 import UpdateUserDialog from "@/components/forms/form-edit-user"
 import ResetPasswordForm from "@/components/forms/form-reset-password"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,6 @@ import { TableUserOrders } from "@/components/tables/table-user-orders"
 import { TableUserUsage } from "@/components/tables/table-user-usage"
 import { TableUserApiKeys } from "@/components/tables/table-user-api-keys"
 import UpdateOrganizationDialog from "@/components/forms/form-edit-organization"
-import Loading from "@/app/loading"
 import { InferSelectModel } from "drizzle-orm"
 import { schema } from "@/db/schema"
 
@@ -330,7 +329,7 @@ export default function AccountPage() {
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Product:
                 </span>
-                <span className="font-bold text-orange-600">ULTIMATE</span>
+                <span className="font-bold text-pink-500">ULTIMATE</span>
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Price (EUR):
                 </span>
@@ -364,7 +363,7 @@ export default function AccountPage() {
         </CardHeader>
         <CardContent className="space-y-5">
           {ordersLoading ? (
-            <Loading />
+            <Loader className="animate-spin h-6 w-6 text-gray-900 dark:text-gray-100" />
           ) : (
             userOrders.length > 0 && <TableUserOrders orders={userOrders} />
           )}
