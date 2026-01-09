@@ -11,7 +11,11 @@ import {
 import { Button } from "@/components/ui/button"
 import { Bell } from "lucide-react"
 
-export function NotificationsDrawer() {
+type NotificationsDrawerProps = {
+  compact?: boolean
+}
+
+export function NotificationsDrawer({ compact }: NotificationsDrawerProps) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -19,7 +23,7 @@ export function NotificationsDrawer() {
           variant="ghost"
           className="flex flex-row gap-5 items-center justify-center"
         >
-          <Bell /> <span className="text-lg">Notifications</span>
+          <Bell /> {!compact && <span className="text-lg">Notifications</span>}
         </Button>
       </DrawerTrigger>
       <DrawerContent className="mx-auto w-full max-w-4xl">

@@ -1,6 +1,14 @@
 "use client"
 
-import { Home, Settings, StickyNote, Loader } from "lucide-react"
+import {
+  Home,
+  Settings,
+  Loader,
+  Clapperboard,
+  SquareChartGantt,
+  SquarePlay,
+  ImagePlay,
+} from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -32,9 +40,24 @@ export const items = [
     icon: Home,
   },
   {
-    title: "Projects",
-    url: "/projects",
-    icon: StickyNote,
+    title: "Video analysis",
+    url: "/analysis",
+    icon: Clapperboard,
+  },
+  {
+    title: "Templates",
+    url: "/templates",
+    icon: SquareChartGantt,
+  },
+  {
+    title: "Content",
+    url: "/content",
+    icon: SquarePlay,
+  },
+  {
+    title: "Metadata",
+    url: "/metadata",
+    icon: ImagePlay,
   },
 ]
 
@@ -56,8 +79,14 @@ export function AppSidebar() {
         <SidebarHeader>
           {open ? (
             <div className="flex flex-row gap-4 items-center justify-center">
-              <Image src="/Avica_logo.png" alt="Logo" width={36} height={36} />
-              <h1 className="text-4xl font-bold bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
+              <Image
+                src="/Avica_logo.png"
+                alt="Logo"
+                width={28}
+                height={28}
+                className="mt-1"
+              />
+              <h1 className="text-3xl font-bold bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
                 AVICA.AI
               </h1>
             </div>
@@ -112,12 +141,17 @@ export function AppSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <NotificationsDrawer />
+              <NotificationsDrawer compact={!open} />
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <ModeSwitcher className="flex items-center justify-start" />
+              <ModeSwitcher
+                className={cn(
+                  "flex items-center justify-start",
+                  !open ? "ml-1" : ""
+                )}
+              />
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
