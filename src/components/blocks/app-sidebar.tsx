@@ -23,6 +23,7 @@ import { authClient } from "@/lib/auth-client"
 import UnauthorizedPage from "@/app/unauthorized"
 import Image from "next/image"
 import Link from "next/link"
+import { NotificationsDrawer } from "./notifications-drawer"
 
 export const items = [
   {
@@ -92,6 +93,8 @@ export function AppSidebar() {
 
       <SidebarFooter className="mt-auto mb-1">
         <SidebarMenu>
+          <Separator className="my-1" />
+
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
@@ -109,6 +112,11 @@ export function AppSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
+              <NotificationsDrawer />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
               <ModeSwitcher className="flex items-center justify-start" />
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -117,7 +125,9 @@ export function AppSidebar() {
               <Logout />
             </SidebarMenuButton>
           </SidebarMenuItem>
+
           <Separator className="my-1" />
+
           <SidebarMenuItem className="p-1">
             {isPending ? (
               <div className="flex items-center justify-center p-2">

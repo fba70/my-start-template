@@ -254,18 +254,22 @@ export default function AccountPage() {
 
       <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
-          <CardTitle className="text-xl font-medium">Balance</CardTitle>
+          <CardTitle className="text-xl font-medium">Account balance</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="flex flex-row gap-4 items-center justify-start">
             <span className="font-medium dark:text-gray-400 text-gray-500">
               Current balance (EUR):
             </span>
-            <span className="text-xl font-medium">12.30</span>
+            <span className="text-xl font-bold border border-gray-500 px-2 rounded-md">
+              12.30
+            </span>
             <span className="font-medium dark:text-gray-400 text-gray-500 ml-8">
               Current balance (Coins):
             </span>
-            <span className="text-xl font-medium">1,230</span>
+            <span className="text-xl font-bold border border-gray-500 px-2 rounded-md">
+              1,230
+            </span>
           </div>
           <Separator />
           <div>Purchase credits</div>
