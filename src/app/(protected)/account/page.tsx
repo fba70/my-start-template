@@ -204,8 +204,8 @@ export default function AccountPage() {
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
           <CardTitle className="text-xl font-medium">Account balance</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-5">
-          <div className="flex flex-row gap-4 items-center justify-start">
+        <CardContent className="space-y-2">
+          <div className="flex flex-row gap-4 items-center justify-start mb-6">
             <span className="font-medium dark:text-gray-400 text-gray-500">
               Current balance (EUR):
             </span>
@@ -319,7 +319,7 @@ export default function AccountPage() {
             Purchases history
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-2">
           <TableUserOrders userId={userState?.id} />
         </CardContent>
       </Card>
@@ -328,7 +328,7 @@ export default function AccountPage() {
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
           <CardTitle className="text-xl font-medium">Usage history</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-2">
           <TableUserUsage />
         </CardContent>
       </Card>
@@ -339,7 +339,7 @@ export default function AccountPage() {
             API keys management
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-2">
           <TableUserApiKeys />
         </CardContent>
       </Card>
