@@ -4,13 +4,13 @@ import { useEffect, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { BadgeCheck, BadgeAlert, Loader } from "lucide-react"
+import { BadgeCheck, BadgeAlert } from "lucide-react"
 import UpdateUserDialog from "@/components/forms/form-edit-user"
 import ResetPasswordForm from "@/components/forms/form-reset-password"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
-import { PolarCustomerState, PolarOrder } from "@/types/polar"
+import { PolarCustomerState } from "@/types/polar"
 import { TableUserOrders } from "@/components/tables/table-user-orders"
 import { TableUserUsage } from "@/components/tables/table-user-usage"
 import { TableUserApiKeys } from "@/components/tables/table-user-api-keys"
@@ -28,18 +28,6 @@ type User = {
   image?: string | null | undefined
 }
 
-type SimplifiedOrders = {
-  id: string
-  createdAt: string
-  paid: boolean
-  netAmount: number
-  taxAmount: number
-  totalAmount: number
-  currency: string
-  invoiceNumber: string
-  productName: string
-}
-
 type Organization = InferSelectModel<typeof schema.organization>
 
 export default function AccountPage() {
@@ -47,8 +35,6 @@ export default function AccountPage() {
   const user = session?.user as User | undefined
 
   const [userState, setUserState] = useState<PolarCustomerState>()
-  const [userOrders, setUserOrders] = useState<SimplifiedOrders[]>([])
-  const [ordersLoading, setOrdersLoading] = useState<boolean>(false)
   const [organization, setOrganization] = useState<Organization | null>(null)
   const [orgKey, setOrgKey] = useState(0)
 
@@ -89,44 +75,6 @@ export default function AccountPage() {
 
     fetchOrganization()
   }, [user?.id, orgKey])
-
-  useEffect(() => {
-    async function fetchUserOrders() {
-      if (!userState?.id) return
-
-      setOrdersLoading(true)
-
-      try {
-        const res = await fetch(
-          `/api/auth/polar/orders?id=${encodeURIComponent(userState?.id)}`
-        )
-        const userOrdersAllData = await res.json()
-        // console.log("Polar user ALL orders:", userOrdersAllData.result.items)
-
-        // Transform to only include the required fields
-        const simplifiedOrders = (
-          userOrdersAllData.result.items as PolarOrder[]
-        ).map((order) => ({
-          id: order.id,
-          createdAt: order.createdAt,
-          paid: order.paid,
-          netAmount: order.netAmount,
-          taxAmount: order.taxAmount,
-          totalAmount: order.totalAmount,
-          currency: order.currency,
-          invoiceNumber: order.invoiceNumber,
-          productName: order.product?.name ?? "",
-        }))
-        setUserOrders(simplifiedOrders)
-        //console.log("Polar user orders:", simplifiedOrders)
-      } catch (e) {
-        console.error("Failed to fetch Polar user orders:", e)
-      }
-      setOrdersLoading(false)
-    }
-
-    fetchUserOrders()
-  }, [user?.id, userState?.id])
 
   return (
     <div className="flex flex-col gap-6 items-center justify-start h-screen">
@@ -372,11 +320,7 @@ export default function AccountPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          {ordersLoading ? (
-            <Loader className="animate-spin h-6 w-6 text-gray-900 dark:text-gray-100" />
-          ) : (
-            userOrders.length > 0 && <TableUserOrders orders={userOrders} />
-          )}
+          <TableUserOrders userId={userState?.id} />
         </CardContent>
       </Card>
 

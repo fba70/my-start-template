@@ -1,7 +1,6 @@
 "use client"
 
-import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Table,
   TableBody,
@@ -12,8 +11,9 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Download } from "lucide-react"
+import { Download, Loader, RefreshCcw } from "lucide-react"
 import { toast } from "sonner"
+import { PolarOrder } from "@/types/polar"
 
 type SimplifiedOrder = {
   id: string
@@ -28,16 +28,58 @@ type SimplifiedOrder = {
 }
 
 type TableUserOrdersProps = {
-  orders: SimplifiedOrder[]
+  userId?: string | null
 }
 
 const ITEMS_PER_PAGE = 5
 
-export function TableUserOrders({ orders }: TableUserOrdersProps) {
+export function TableUserOrders({ userId }: TableUserOrdersProps) {
+  const [orders, setOrders] = useState<SimplifiedOrder[]>([])
+  const [ordersLoading, setOrdersLoading] = useState<boolean>(false)
   const [page, setPage] = useState(1)
   const [sortAsc, setSortAsc] = useState(false)
   const [searchInvoice, setSearchInvoice] = useState("")
   const [searchTotal, setSearchTotal] = useState("")
+  const [keyChange, setKeyChange] = useState(0)
+
+  useEffect(() => {
+    async function fetchUserOrders() {
+      if (!userId) {
+        setOrders([])
+        return
+      }
+
+      setOrdersLoading(true)
+      try {
+        const res = await fetch(
+          `/api/auth/polar/orders?id=${encodeURIComponent(userId)}`
+        )
+        const userOrdersAllData = await res.json()
+
+        const simplifiedOrders = (
+          userOrdersAllData.result.items as PolarOrder[]
+        ).map((order) => ({
+          id: order.id,
+          createdAt: order.createdAt,
+          paid: order.paid,
+          netAmount: order.netAmount,
+          taxAmount: order.taxAmount,
+          totalAmount: order.totalAmount,
+          currency: order.currency,
+          invoiceNumber: order.invoiceNumber,
+          productName: order.product?.name ?? "",
+        }))
+        setOrders(simplifiedOrders)
+      } catch (e) {
+        console.error("Failed to fetch Polar user orders:", e)
+        toast.error("Failed to load orders")
+      } finally {
+        setOrdersLoading(false)
+      }
+    }
+
+    fetchUserOrders()
+  }, [userId, keyChange])
 
   // Filter by invoice_number and total_amount
   const filteredOrders = orders.filter((order) => {
@@ -83,24 +125,36 @@ export function TableUserOrders({ orders }: TableUserOrdersProps) {
     }
   }
 
+  if (ordersLoading) {
+    return (
+      <Loader className="animate-spin h-6 w-6 text-gray-900 dark:text-gray-100" />
+    )
+  }
+
   return (
     <>
-      <div className="flex gap-2 mb-4">
-        <Input
-          placeholder="Search invoice number"
-          value={searchInvoice}
-          onChange={(e) => setSearchInvoice(e.target.value)}
-          className="max-w-xs"
-        />
-        <Input
-          placeholder="Search total amount"
-          type="number"
-          value={searchTotal}
-          onChange={(e) => setSearchTotal(e.target.value)}
-          className="max-w-xs"
-        />
-        <Button variant="outline" onClick={() => setSortAsc(!sortAsc)}>
-          Sort by Date {sortAsc ? "↑" : "↓"}
+      <div className="flex flex-row items-center justify-between mb-4">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Search invoice number"
+            value={searchInvoice}
+            onChange={(e) => setSearchInvoice(e.target.value)}
+            className="max-w-xs"
+          />
+          <Input
+            placeholder="Search total amount"
+            type="number"
+            value={searchTotal}
+            onChange={(e) => setSearchTotal(e.target.value)}
+            className="max-w-xs"
+          />
+          <Button variant="outline" onClick={() => setSortAsc(!sortAsc)}>
+            Sort by Date {sortAsc ? "↑" : "↓"}
+          </Button>
+        </div>
+
+        <Button variant="outline" onClick={() => setKeyChange(keyChange + 1)}>
+          <RefreshCcw />
         </Button>
       </div>
 

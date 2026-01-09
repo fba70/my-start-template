@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import type { ApiKey } from "@/db/schema"
 import CreateApiKeyDialog from "@/components/forms/form-create-api-key"
 import { toast } from "sonner"
-import { Loader } from "lucide-react"
+import { Loader, RefreshCcw } from "lucide-react"
 
 const ITEMS_PER_PAGE = 5
 
@@ -134,6 +134,13 @@ export function TableUserApiKeys() {
             <CreateApiKeyDialog
               onSuccess={() => setKeyChange((prev) => prev + 1)}
             />
+
+            <Button
+              variant="outline"
+              onClick={() => setKeyChange(keyChange + 1)}
+            >
+              <RefreshCcw />
+            </Button>
           </div>
 
           <Table>

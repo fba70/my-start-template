@@ -111,7 +111,7 @@ export default function CreateApiKeyDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="mt-4">
+        <Button variant="default" className="">
           Add New API Key
         </Button>
       </DialogTrigger>

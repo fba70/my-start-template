@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { RefreshCcw } from "lucide-react"
 
 type SimplifiedUsage = {
   id: string
@@ -60,6 +61,7 @@ export function TableUserUsage() {
   const [sortAsc, setSortAsc] = useState(false)
   const [searchType, setSearchType] = useState("")
   const [searchName, setSearchName] = useState("")
+  const [keyChange, setKeyChange] = useState(0)
 
   // Filter by invoice_number and total_amount
   const filteredUsage = usage.filter((usageItem) => {
@@ -88,22 +90,28 @@ export function TableUserUsage() {
 
   return (
     <>
-      <div className="flex gap-2 mb-4">
-        <Input
-          placeholder="Search usage type"
-          value={searchType}
-          onChange={(e) => setSearchType(e.target.value)}
-          className="max-w-xs"
-        />
-        <Input
-          placeholder="Search usage name"
-          type="text"
-          value={searchName}
-          onChange={(e) => setSearchName(e.target.value)}
-          className="max-w-xs"
-        />
-        <Button variant="outline" onClick={() => setSortAsc(!sortAsc)}>
-          Sort by Date {sortAsc ? "↑" : "↓"}
+      <div className="flex flex-row items-center justify-between mb-4">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Search usage type"
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+            className="max-w-xs"
+          />
+          <Input
+            placeholder="Search usage name"
+            type="text"
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            className="max-w-xs"
+          />
+          <Button variant="outline" onClick={() => setSortAsc(!sortAsc)}>
+            Sort by Date {sortAsc ? "↑" : "↓"}
+          </Button>
+        </div>
+
+        <Button variant="outline" onClick={() => setKeyChange(keyChange + 1)}>
+          <RefreshCcw />
         </Button>
       </div>
 
