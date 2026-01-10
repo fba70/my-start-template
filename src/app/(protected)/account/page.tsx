@@ -227,7 +227,9 @@ export default function AccountPage() {
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Product:
                 </span>
-                <span className="font-bold text-lime-600">STARTER</span>
+                <span className="font-bold text-lime-600 border border-gray-500 px-2 rounded-md text-center">
+                  STARTER
+                </span>
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Price (EUR):
                 </span>
@@ -256,7 +258,9 @@ export default function AccountPage() {
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Product:
                 </span>
-                <span className="font-bold text-blue-500">PRO</span>
+                <span className="font-bold text-blue-500 border border-gray-500 px-2 rounded-md text-center">
+                  PRO
+                </span>
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Price (EUR):
                 </span>
@@ -285,7 +289,9 @@ export default function AccountPage() {
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Product:
                 </span>
-                <span className="font-bold text-pink-500">ULTIMATE</span>
+                <span className="font-bold text-pink-500 border border-gray-500 px-2 rounded-md text-center">
+                  ULTIMATE
+                </span>
                 <span className="font-medium dark:text-gray-400 text-gray-500">
                   Price (EUR):
                 </span>

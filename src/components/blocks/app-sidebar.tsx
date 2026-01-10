@@ -8,6 +8,7 @@ import {
   SquareChartGantt,
   SquarePlay,
   ImagePlay,
+  FileText,
 } from "lucide-react"
 import {
   Sidebar,
@@ -96,6 +97,7 @@ export function AppSidebar() {
         </SidebarHeader>
 
         <SidebarGroup>
+          <Separator className="mb-3 -mt-3" />
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -142,6 +144,21 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <NotificationsDrawer compact={!open} />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link
+                href={"/docs"}
+                className={`flex items-center p-2 rounded-md ${
+                  pathname === "/docs"
+                    ? "bg-gray-200 dark:bg-gray-600 text-orange-400"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
+                }`}
+              >
+                <FileText size={24} className="mr-3 ml-1" />
+                <span className="text-lg">Documents</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
