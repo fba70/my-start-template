@@ -67,8 +67,17 @@ export function AppSidebar() {
   const { open } = useSidebar()
 
   const { data: session, isPending, error } = authClient.useSession()
+  const {
+    data: organization,
+    isPending: isPendingOrg,
+    error: errorOrg,
+  } = authClient.useActiveOrganization()
 
   if (!isPending && (error || !session)) {
+    return <UnauthorizedPage />
+  }
+
+  if (!isPendingOrg && (errorOrg || !organization)) {
     return <UnauthorizedPage />
   }
 
@@ -178,6 +187,47 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <Separator className="my-1" />
+          <SidebarMenuItem className="p-1">
+            {isPendingOrg ? (
+              <div className="flex items-center justify-center p-2">
+                <Loader className="animate-spin h-6 w-6 text-gray-900 dark:text-gray-100" />
+              </div>
+            ) : session ? (
+              <div
+                className={cn(
+                  "flex items-center gap-3 pl-1",
+                  !open && "justify-center rounded-full"
+                )}
+              >
+                <Avatar className={cn("h-8 w-8", !open && "h-6 w-6")}>
+                  <AvatarImage
+                    src={organization?.logo ?? undefined}
+                    alt={organization?.name ?? "User"}
+                  />
+                  <AvatarFallback>
+                    {organization?.name
+                      ? organization?.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()
+                      : "U"}
+                  </AvatarFallback>
+                </Avatar>
+                {open && (
+                  <span className="text-lg font-medium text-gray-800 dark:text-gray-100 truncate">
+                    {organization?.name}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center p-2">
+                <span className="text-sm text-gray-500 truncate">
+                  No organization
+                </span>
+              </div>
+            )}
+          </SidebarMenuItem>
 
           <SidebarMenuItem className="p-1">
             {isPending ? (
@@ -214,7 +264,9 @@ export function AppSidebar() {
               </div>
             ) : (
               <div className="flex items-center justify-center p-2">
-                <span className="text-sm text-gray-500">No session</span>
+                <span className="text-sm text-gray-500 truncate">
+                  No session
+                </span>
               </div>
             )}
           </SidebarMenuItem>

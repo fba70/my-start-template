@@ -33,23 +33,41 @@ const polarClient = new Polar({
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
-    schema,
+    schema: schema,
   }),
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 1 day (every 1 day the session expiration is updated)
     freshAge: 0, // 5 minutes, 0 to disable freshness checks
+    additionalFields: {
+      activeOrganizationId: {
+        type: "string",
+        returned: true,
+      },
+      activeOrganizationName: {
+        type: "string",
+        returned: true,
+      },
+      activeOrganizationLogo: {
+        type: "string",
+        returned: true,
+      },
+      activeOrganizationSlug: {
+        type: "string",
+        returned: true,
+      },
+    },
   },
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      // redirectURI: "https://crm-mvp-2025.vercel.app/api/auth/callback/github",
+      // redirectURI: "https://xxx/api/auth/callback/github",
     },
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // redirectURI: "https://crm-mvp-2025.vercel.app/api/auth/callback/google",
+      // redirectURI: "https://xxx/api/auth/callback/google",
     },
   },
   emailAndPassword: {
@@ -99,6 +117,9 @@ export const auth = betterAuth({
             data: {
               ...session,
               activeOrganizationId: organization?.id,
+              activeOrganizationName: organization?.name,
+              activeOrganizationLogo: organization?.logo,
+              activeOrganizationSlug: organization?.slug,
             },
           }
         },
