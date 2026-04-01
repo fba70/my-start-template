@@ -1,5 +1,6 @@
 import { createAuthClient } from "better-auth/react"
-import { organizationClient, apiKeyClient } from "better-auth/client/plugins"
+import { organizationClient } from "better-auth/client/plugins"
+import { apiKeyClient } from "@better-auth/api-key/client"
 import { polarClient } from "@polar-sh/better-auth"
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
