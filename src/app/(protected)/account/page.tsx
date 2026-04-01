@@ -45,7 +45,7 @@ export default function AccountPage() {
       if (!user?.id) return
       try {
         const res = await fetch(
-          `/api/auth/polar/state?id=${encodeURIComponent(user.id)}`
+          `/api/auth/polar/state?id=${encodeURIComponent(user.id)}`,
         )
         const userState = await res.json()
         setUserState(userState)
@@ -63,7 +63,7 @@ export default function AccountPage() {
       if (!user?.id) return
       try {
         const res = await fetch(
-          `/api/organization?userId=${encodeURIComponent(user.id)}`
+          `/api/organization?userId=${encodeURIComponent(user.id)}`,
         )
         const data = await res.json()
         setOrganization(data.organization)
@@ -77,7 +77,7 @@ export default function AccountPage() {
   }, [user?.id, orgKey])
 
   return (
-    <div className="flex flex-col gap-6 items-center justify-start h-screen">
+    <div className="flex flex-col gap-6 items-center justify-start min-h-screen pb-8">
       <h1 className="text-2xl font-medium mt-2">ACCOUNT</h1>
 
       <div className="flex flex-row gap-12 items-center justify-center">

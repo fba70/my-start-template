@@ -30,8 +30,8 @@ export const createApiKey = async ({
         expiresIn,
         prefix,
         metadata: { keyDescription: description },
-        userId: session.user.id, // Required for server-side
       },
+      headers: await headers(),
     })
     return { data, error: null }
   } catch (error) {

@@ -24,12 +24,12 @@ export default function Home() {
               loading="eager"
             />
             <p className="text-6xl font-bold mt-auto bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
-              truffalo.ai
+              TEST123
             </p>
           </div>
 
           <div className="flex flex-col p-12 pt-4 items-center justify-center">
-            <p className="text-gray-300 text-lg">AI-native platform!!!</p>
+            <p className="text-gray-300 text-lg">AI-Native CRM Platform</p>
           </div>
         </div>
       </ElectricBorder>

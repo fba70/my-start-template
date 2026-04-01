@@ -36,7 +36,8 @@ export function TableUserApiKeys() {
         }
         const data = await res.json()
         // console.log("Fetched API keys:", data)
-        setApiKeys(data.data || [])
+        const keys = data.data?.apiKeys ?? data.data ?? []
+        setApiKeys(Array.isArray(keys) ? keys : [])
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error")
       } finally {
@@ -66,7 +67,7 @@ export function TableUserApiKeys() {
   const totalPages = Math.ceil(sortedKeys.length / ITEMS_PER_PAGE)
   const paginatedKeys = sortedKeys.slice(
     (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
+    page * ITEMS_PER_PAGE,
   )
 
   const getStatus = (expiresAt: Date | null) => {

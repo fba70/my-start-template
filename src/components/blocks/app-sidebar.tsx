@@ -1,15 +1,6 @@
 "use client"
 
-import {
-  Home,
-  Settings,
-  Loader,
-  Clapperboard,
-  SquareChartGantt,
-  SquarePlay,
-  ImagePlay,
-  FileText,
-} from "lucide-react"
+import { Home, Settings, Loader, SquarePlay, FileText } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -41,24 +32,9 @@ export const items = [
     icon: Home,
   },
   {
-    title: "Video analysis",
-    url: "/analysis",
-    icon: Clapperboard,
-  },
-  {
-    title: "Templates",
-    url: "/templates",
-    icon: SquareChartGantt,
-  },
-  {
     title: "Content",
     url: "/content",
     icon: SquarePlay,
-  },
-  {
-    title: "Metadata",
-    url: "/metadata",
-    icon: ImagePlay,
   },
 ]
 
@@ -88,20 +64,26 @@ export function AppSidebar() {
       <SidebarContent className="flex-1">
         <SidebarHeader>
           {open ? (
-            <div className="flex flex-row gap-4 items-center justify-center">
+            <div className="flex flex-row gap-5 items-center justify-center">
               <Image
-                src="/Avica_logo.png"
+                src="/TP_golden_icon_small.jpg"
                 alt="Logo"
                 width={28}
                 height={28}
-                className="mt-1"
+                className="mt-1 rounded-full"
               />
-              <h1 className="text-3xl font-bold bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
-                AVICA.AI
+              <h1 className="text-4xl font-bold bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
+                truffalo.ai
               </h1>
             </div>
           ) : (
-            <Image src="/Avica_logo.png" alt="Logo" width={40} height={40} />
+            <Image
+              src="/TP_golden_icon_small.jpg"
+              alt="Logo"
+              width={40}
+              height={40}
+              className="mt-1 rounded-full"
+            />
           )}
         </SidebarHeader>
 
@@ -112,7 +94,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a
+                    <Link
                       href={item.url}
                       className={`flex items-center p-2 rounded-md ${
                         pathname === item.url
@@ -122,7 +104,7 @@ export function AppSidebar() {
                     >
                       <item.icon size={24} className="mr-2" />
                       <span className="text-lg">{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -175,7 +157,7 @@ export function AppSidebar() {
               <ModeSwitcher
                 className={cn(
                   "flex items-center justify-start",
-                  !open ? "ml-1" : ""
+                  !open ? "ml-1" : "",
                 )}
               />
             </SidebarMenuButton>
@@ -196,7 +178,7 @@ export function AppSidebar() {
               <div
                 className={cn(
                   "flex items-center gap-3 pl-1",
-                  !open && "justify-center rounded-full"
+                  !open && "justify-center rounded-full",
                 )}
               >
                 <Avatar className={cn("h-8 w-8", !open && "h-6 w-6")}>
@@ -238,7 +220,7 @@ export function AppSidebar() {
               <div
                 className={cn(
                   "flex items-center gap-3 pl-1",
-                  !open && "justify-center rounded-full"
+                  !open && "justify-center rounded-full",
                 )}
               >
                 <Avatar className={cn("h-8 w-8", !open && "h-6 w-6")}>

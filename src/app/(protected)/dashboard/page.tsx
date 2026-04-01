@@ -18,20 +18,18 @@ export default function DashboardPage() {
           <div className="h-auto w-[380px] flex flex-col items-center justify-center p-4">
             <div className="flex flex-col p-12 pb-4 h-full items-center justify-center">
               <Image
-                src="/Avica_logo.png"
+                src="/TP_golden_nobg.png"
                 alt="Logo"
                 width={260}
                 height={260}
               />
-              <p className="text-6xl font-bold mt-auto bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
-                AVICA.AI
+              <p className="text-5xl font-bold mt-4 bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
+                truffalo.ai
               </p>
             </div>
 
             <div className="flex flex-col p-12 pt-4 items-center justify-center">
-              <p className="text-gray-200 text-lg">
-                Your digital content at scale
-              </p>
+              <p className="text-gray-200 text-lg">AI-Native CRM Platform</p>
             </div>
           </div>
         </ElectricBorder>
