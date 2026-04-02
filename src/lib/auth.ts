@@ -19,7 +19,7 @@ import {
 const config: Config = {
   dictionaries: [adjectives, nouns],
   separator: "-",
-  length: 2,
+  length: 30,
   style: "lowerCase",
 }
 

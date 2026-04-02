@@ -156,11 +156,11 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}
+
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <NotificationsDrawer compact={!open} />
-            </SidebarMenuButton>
+            <NotificationsDrawer compact={!open} />
           </SidebarMenuItem>
+
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
@@ -176,6 +176,7 @@ export function AppSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
+
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <ModeSwitcher
@@ -186,6 +187,7 @@ export function AppSidebar() {
               />
             </SidebarMenuButton>
           </SidebarMenuItem>
+
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Logout />

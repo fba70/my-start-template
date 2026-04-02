@@ -17,7 +17,7 @@ import { RefreshCcw } from "lucide-react"
 type SimplifiedUsage = {
   id: string
   createdAt: string
-  amountCoins: number
+  amountTokens: number
   amountCurrency: number
   currency: string
   usageType: string
@@ -30,29 +30,29 @@ const usage: SimplifiedUsage[] = [
   {
     id: "1",
     createdAt: "2025-12-01T10:00:00Z",
-    amountCoins: 100,
-    amountCurrency: 1.0,
+    amountTokens: 100,
+    amountCurrency: 3.5,
     currency: "EUR",
-    usageType: "Video medium",
-    usageName: "Generate video up to 15 seconds",
+    usageType: "Usage",
+    usageName: "Content generation",
   },
   {
     id: "2",
     createdAt: "2025-12-07T11:30:00Z",
-    amountCoins: 50,
-    amountCurrency: 0.5,
+    amountTokens: 50,
+    amountCurrency: 1.5,
     currency: "EUR",
-    usageType: "PDF short",
-    usageName: "Generate PDF up to 5 pages",
+    usageType: "Usage",
+    usageName: "External sources calls",
   },
   {
     id: "3",
     createdAt: "2025-12-22T11:30:00Z",
-    amountCoins: 250,
-    amountCurrency: 2.5,
+    amountTokens: 0,
+    amountCurrency: 100.0,
     currency: "EUR",
-    usageType: "Parse for Template",
-    usageName: "Parse video for template",
+    usageType: "Subscription",
+    usageName: "Monthly subscription",
   },
 ]
 
@@ -85,7 +85,7 @@ export function TableUserUsage() {
   const totalPages = Math.ceil(sortedUsage.length / ITEMS_PER_PAGE)
   const paginatedUsage = sortedUsage.slice(
     (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
+    page * ITEMS_PER_PAGE,
   )
 
   return (
@@ -121,7 +121,7 @@ export function TableUserUsage() {
             <TableHead>Usage date</TableHead>
             <TableHead>Usage type</TableHead>
             <TableHead>Usage name</TableHead>
-            <TableHead>Amount coins</TableHead>
+            <TableHead>Amount tokens</TableHead>
             <TableHead>Amount currentcy</TableHead>
             <TableHead>Currency</TableHead>
           </TableRow>
@@ -134,7 +134,7 @@ export function TableUserUsage() {
               </TableCell>
               <TableCell>{usage.usageType}</TableCell>
               <TableCell>{usage.usageName}</TableCell>
-              <TableCell>{usage.amountCoins}</TableCell>
+              <TableCell>{usage.amountTokens}</TableCell>
               <TableCell>{usage.amountCurrency}</TableCell>
               <TableCell>{usage.currency}</TableCell>
             </TableRow>

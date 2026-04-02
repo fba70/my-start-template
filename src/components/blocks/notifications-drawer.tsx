@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import {
   Drawer,
   DrawerClose,
@@ -16,12 +19,17 @@ type NotificationsDrawerProps = {
 }
 
 export function NotificationsDrawer({ compact }: NotificationsDrawerProps) {
+  const [open, setOpen] = useState(false)
+
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button
           variant="ghost"
           className="flex flex-row gap-5 items-center justify-center"
+          onClick={(e) => {
+            e.currentTarget.blur()
+          }}
         >
           <Bell /> {!compact && <span className="text-lg">Notifications</span>}
         </Button>

@@ -91,9 +91,9 @@ export default function AccountPage() {
     <div className="flex flex-col gap-6 items-center justify-start min-h-screen pb-8">
       <h1 className="text-2xl font-medium mt-2">ACCOUNT</h1>
 
-      <div className="flex flex-row gap-12 items-center justify-center">
+      <div className="flex flex-row gap-6 items-stretch justify-center w-full max-w-5xl">
         {user && (
-          <Card className="w-full max-w-xl">
+          <Card className="w-1/2">
             <CardHeader className="flex flex-row items-center gap-6 justify-start">
               <CardTitle className="text-xl font-medium">User:</CardTitle>
               <Avatar>
@@ -148,7 +148,7 @@ export default function AccountPage() {
         )}
 
         {organization && (
-          <Card className="w-full max-w-xl">
+          <Card className="w-1/2">
             <CardHeader className="flex flex-row items-center gap-6 justify-start">
               <CardTitle className="text-xl font-medium">
                 Organization:
