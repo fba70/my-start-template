@@ -1,12 +1,23 @@
 "use client"
 
+import { useSyncExternalStore } from "react"
 import ElectricBorder from "@/components/ui/electric-border/ElectricBorder"
 import Image from "next/image"
 import { useTheme } from "next-themes"
 
+const subscribe = () => () => {}
+const getSnapshot = () => true
+const getServerSnapshot = () => false
+
 export default function DashboardPage() {
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === "dark"
+  const mounted = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  )
+
+  const isDark = mounted && resolvedTheme === "dark"
 
   const borderColor = isDark ? "#7df9ff" : "#C46B00"
   const subtitleColor = isDark ? "text-gray-200" : "text-gray-600"
@@ -24,7 +35,7 @@ export default function DashboardPage() {
           style={{ borderRadius: 16 }}
           className=""
         >
-          <div className="h-auto w-[380px] flex flex-col items-center justify-center p-4">
+          <div className="h-auto w-95 flex flex-col items-center justify-center p-4">
             <div className="flex flex-col p-12 pb-4 h-full items-center justify-center">
               <Image
                 src="/TP_golden_nobg.png"

@@ -1,6 +1,13 @@
 "use client"
 
-import { Home, Settings, Loader, SquarePlay, FileText } from "lucide-react"
+import {
+  Home,
+  Loader,
+  FileText,
+  ShieldCheck,
+  CircleUserRound,
+  FileImage,
+} from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -32,9 +39,9 @@ export const items = [
     icon: Home,
   },
   {
-    title: "Content",
-    url: "/content",
-    icon: SquarePlay,
+    title: "Cards",
+    url: "/cards",
+    icon: FileImage,
   },
 ]
 
@@ -72,7 +79,7 @@ export function AppSidebar() {
                 height={28}
                 className="mt-1 rounded-full"
               />
-              <h1 className="text-4xl font-bold bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-linear-to-r from-orange-500 via-pink-500 to-blue-400 bg-clip-text text-transparent">
                 truffalo.ai
               </h1>
             </div>
@@ -127,11 +134,28 @@ export function AppSidebar() {
                     : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
                 }`}
               >
-                <Settings size={24} className="mr-3 ml-1" />
+                <CircleUserRound size={24} className="mr-3 ml-1" />
                 <span className="text-lg">Account</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
+          {session?.user?.role === "admin" && (
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link
+                  href={"/settings"}
+                  className={`flex items-center p-2 rounded-md ${
+                    pathname === "/settings"
+                      ? "bg-gray-200 dark:bg-gray-600 text-orange-400"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-white"
+                  }`}
+                >
+                  <ShieldCheck size={24} className="mr-3 ml-1" />
+                  <span className="text-lg">Settings</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <NotificationsDrawer compact={!open} />

@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { db } from "@/db/drizzle"
 import { schema } from "@/db/schema"
 import { sendEmails } from "@/lib/email"
-import { lastLoginMethod, organization } from "better-auth/plugins"
+import { lastLoginMethod, organization, admin } from "better-auth/plugins"
 import { apiKey } from "@better-auth/api-key"
 import { nextCookies } from "better-auth/next-js"
 import { polar, checkout, portal, usage } from "@polar-sh/better-auth"
@@ -130,7 +130,26 @@ export const auth = betterAuth({
   plugins: [
     lastLoginMethod(),
     nextCookies(),
-    organization(),
+    organization({
+      async sendInvitationEmail(data) {
+        const appUrl =
+          process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+        const inviteLink = `${appUrl}/accept-invitation/${data.id}`
+        await sendEmails({
+          to: data.email,
+          subject: `You've been invited to join ${data.organization.name}`,
+          body: `
+            <p>Hi,</p>
+            <p><strong>${data.inviter.user.name}</strong> (${data.inviter.user.email}) has invited you to join <strong>${data.organization.name}</strong>.</p>
+            <p><a href="${inviteLink}">Click here to accept the invitation</a></p>
+            <p>If you don't have an account yet, you'll be able to create one.</p>
+          `,
+        })
+      },
+    }),
+    admin({
+      adminUserIds: ["f4c577O0wsUOkzxTAUeRAHfKNlvLyQeZ"],
+    }),
     apiKey(),
     polar({
       client: polarClient,

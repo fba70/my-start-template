@@ -13,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { LoadingButton } from "@/components/blocks/loading-button"
 import { Input } from "@/components/ui/input"
-import { authClient } from "@/lib/auth-client"
 import {
   Form,
   FormField,
@@ -22,102 +21,77 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form"
-import { InferSelectModel } from "drizzle-orm"
-import { schema } from "@/db/schema"
 import { toast } from "sonner"
+import type { AdminOrg } from "@/app/api/admin/organizations/route"
 
-type Organization = InferSelectModel<typeof schema.organization>
-
-type UpdateOrganizationFormData = {
+type EditOrgFormData = {
   name: string
   slug: string
   taxId: string
   logo: string
 }
 
-export default function UpdateOrganizationDialog({
-  organization,
+export default function AdminEditOrgDialog({
+  org,
   onSuccess,
 }: {
-  organization: Organization
+  org: AdminOrg
   onSuccess?: () => void
 }) {
   const [open, setOpen] = useState(false)
-  const [success, setSuccess] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const [imagePreview, setImagePreview] = useState(org.logo || "")
 
-  const [imagePreview, setImagePreview] = useState(organization.logo || "")
+  const parsedTaxId = (() => {
+    try {
+      const parsed =
+        typeof org.metadata === "string"
+          ? JSON.parse(org.metadata)
+          : org.metadata
+      return parsed?.taxId || ""
+    } catch {
+      return ""
+    }
+  })()
 
-  const form = useForm<UpdateOrganizationFormData>({
+  const form = useForm<EditOrgFormData>({
     defaultValues: {
-      name: organization.name || "",
-      slug: organization.slug || "",
-      taxId: (() => {
-        try {
-          const parsed =
-            typeof organization.metadata === "string"
-              ? JSON.parse(organization.metadata)
-              : organization.metadata
-          return parsed?.taxId || ""
-        } catch {
-          return ""
-        }
-      })(),
-      logo: organization.logo || "",
+      name: org.name || "",
+      slug: org.slug || "",
+      taxId: parsedTaxId,
+      logo: org.logo || "",
     },
   })
 
-  const {
-    setValue,
-    formState: { errors },
-  } = form
+  const { setValue } = form
 
-  const onSubmit = (data: UpdateOrganizationFormData) => {
-    setSuccess(null)
-    setError(null)
-
+  const onSubmit = (data: EditOrgFormData) => {
     startTransition(async () => {
-      // Check if the slug is available (only if it changed)
-      if (data.slug !== organization.slug) {
-        const { data: slugAvailable, error: slugError } =
-          await authClient.organization.checkSlug({
+      try {
+        const res = await fetch("/api/admin/organizations", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            organizationId: org.id,
+            name: data.name,
             slug: data.slug,
-          })
+            logo: data.logo,
+            taxId: data.taxId,
+          }),
+        })
 
-        if (slugError) {
-          setError(slugError.message || "Error checking slug availability")
-          toast.error(slugError.message || "Error checking slug availability")
+        if (!res.ok) {
+          const err = await res.json()
+          toast.error(err.error || "Failed to update organization")
           return
         }
 
-        if (!slugAvailable) {
-          setError("Slug is already taken by another organization")
-          return
-        }
+        toast.success("Organization updated successfully")
+        onSuccess?.()
+        setOpen(false)
+      } catch {
+        toast.error("Failed to update organization")
       }
-
-      // Proceed with the update
-      const { error } = await authClient.organization.update({
-        data: {
-          name: data.name,
-          slug: data.slug,
-          metadata: { taxId: data.taxId },
-          logo: data.logo,
-        },
-        organizationId: organization.id,
-      })
-
-      if (error) {
-        setError(error.message || "Something went wrong")
-      } else {
-        if (onSuccess) onSuccess()
-        setSuccess("Organization data has been updated successfully!")
-        toast.success("Organization data has been updated successfully!")
-      }
-
-      form.reset()
-      setOpen(false)
     })
   }
 
@@ -125,11 +99,11 @@ export default function UpdateOrganizationDialog({
     const file = e.target.files?.[0]
     if (!file) return
     if (!["image/png", "image/jpeg"].includes(file.type)) {
-      alert("Only PNG or JPEG allowed")
+      toast.error("Only PNG or JPEG allowed")
       return
     }
     if (file.size > 300 * 1024) {
-      alert("File must be less than 300kb")
+      toast.error("File must be less than 300kb")
       return
     }
     const reader = new FileReader()
@@ -144,13 +118,13 @@ export default function UpdateOrganizationDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="mt-4">
-          Edit Organization Profile
+        <Button variant="outline" size="sm">
+          Edit
         </Button>
       </DialogTrigger>
       <DialogContent className="dark:bg-gray-800">
-        <DialogHeader className="mb-2">
-          <DialogTitle>Edit Organization Profile</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>Edit Organization: {org.name}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -161,7 +135,7 @@ export default function UpdateOrganizationDialog({
                 <FormItem>
                   <FormLabel className="text-gray-400">Name</FormLabel>
                   <FormControl>
-                    <Input id="name" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -174,7 +148,7 @@ export default function UpdateOrganizationDialog({
                 <FormItem>
                   <FormLabel className="text-gray-400">Slug</FormLabel>
                   <FormControl>
-                    <Input id="slug" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -187,7 +161,7 @@ export default function UpdateOrganizationDialog({
                 <FormItem>
                   <FormLabel className="text-gray-400">Tax ID</FormLabel>
                   <FormControl>
-                    <Input id="taxId" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -198,10 +172,9 @@ export default function UpdateOrganizationDialog({
               name="logo"
               render={() => (
                 <FormItem>
-                  <FormLabel className="text-gray-400">Profile Image</FormLabel>
+                  <FormLabel className="text-gray-400">Logo</FormLabel>
                   <FormControl>
                     <Input
-                      id="image"
                       type="file"
                       accept="image/png, image/jpeg"
                       onChange={handleImageChange}
@@ -218,24 +191,8 @@ export default function UpdateOrganizationDialog({
                 </FormItem>
               )}
             />
-
-            {success && (
-              <div role="status" className="text-sm text-green-600">
-                {success}
-              </div>
-            )}
-            {error && (
-              <div role="alert" className="text-sm text-red-600">
-                {error}
-              </div>
-            )}
-
             <DialogFooter>
-              <LoadingButton
-                type="submit"
-                className="w-full"
-                loading={isPending}
-              >
+              <LoadingButton type="submit" className="w-full" loading={isPending}>
                 Save
               </LoadingButton>
             </DialogFooter>

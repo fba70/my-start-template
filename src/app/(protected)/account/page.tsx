@@ -15,6 +15,7 @@ import { TableUserOrders } from "@/components/tables/table-user-orders"
 import { TableUserUsage } from "@/components/tables/table-user-usage"
 import { TableUserApiKeys } from "@/components/tables/table-user-api-keys"
 import UpdateOrganizationDialog from "@/components/forms/form-edit-organization"
+import { TableOrgMembers } from "@/components/tables/table-org-members"
 import { InferSelectModel } from "drizzle-orm"
 import { schema } from "@/db/schema"
 
@@ -36,6 +37,7 @@ export default function AccountPage() {
 
   const [userState, setUserState] = useState<PolarCustomerState>()
   const [organization, setOrganization] = useState<Organization | null>(null)
+  const [memberRole, setMemberRole] = useState<string | null>(null)
   const [orgKey, setOrgKey] = useState(0)
 
   //console.log("User session in settings page:", session)
@@ -67,7 +69,16 @@ export default function AccountPage() {
         )
         const data = await res.json()
         setOrganization(data.organization)
-        //console.log("User organization:", data.organization)
+
+        if (data.organization?.id) {
+          const { data: members } = await authClient.organization.listMembers({
+            query: { organizationId: data.organization.id },
+          })
+          const currentMember = members?.members?.find(
+            (m: { userId: string }) => m.userId === user.id,
+          )
+          setMemberRole(currentMember?.role ?? null)
+        }
       } catch (e) {
         console.error("Failed to fetch organization:", e)
       }
@@ -189,16 +200,34 @@ export default function AccountPage() {
                 </span>
               </div>
 
-              <div className="flex flex-row gap-4 items-center justify-center">
-                <UpdateOrganizationDialog
-                  organization={organization}
-                  onSuccess={() => setOrgKey((prev) => prev + 1)}
-                />
-              </div>
+              {memberRole === "owner" && (
+                <div className="flex flex-row gap-4 items-center justify-center">
+                  <UpdateOrganizationDialog
+                    organization={organization}
+                    onSuccess={() => setOrgKey((prev) => prev + 1)}
+                  />
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
       </div>
+
+      {memberRole === "owner" && organization && user && (
+        <Card className="w-full max-w-5xl">
+          <CardHeader className="flex flex-row items-center gap-6 justify-start">
+            <CardTitle className="text-xl font-medium">
+              Organization Members
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TableOrgMembers
+              organizationId={organization.id}
+              currentUserId={user.id}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="w-full max-w-5xl">
         <CardHeader className="flex flex-row items-center gap-6 justify-start">
@@ -213,7 +242,7 @@ export default function AccountPage() {
               12.30
             </span>
             <span className="font-medium dark:text-gray-400 text-gray-500 ml-8">
-              Current balance (Coins):
+              Current balance (Tokens):
             </span>
             <span className="text-xl font-bold border border-gray-500 px-2 rounded-md">
               1,230
